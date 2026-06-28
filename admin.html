@@ -34,7 +34,6 @@
     </script>
 
     <style>
-        /* All styles remain same - no changes needed */
         * {
             margin: 0;
             padding: 0;
@@ -1434,58 +1433,6 @@
         }
 
         // ============================================================
-        // ✅ FIXED: SHOW CONFIRM POPUP (For Admin Actions)
-        // ============================================================
-        function showConfirmPopup(title, message, onConfirm, onCancel) {
-            const popup = document.getElementById('customPopup');
-            const icon = document.getElementById('popupIcon');
-            const titleEl = document.getElementById('popupTitle');
-            const msgEl = document.getElementById('popupMessage');
-            const actions = document.getElementById('popupActions');
-            const closeBtn = document.getElementById('popupCloseBtn');
-
-            icon.textContent = '❓';
-            icon.className = 'popup-icon warning';
-            titleEl.textContent = title;
-            msgEl.textContent = message;
-            actions.innerHTML = `
-                    <button class="btn-secondary" id="popupCancelBtn">Cancel</button>
-                    <button class="btn-danger" id="popupConfirmBtn">Confirm</button>
-                `;
-
-            popup.classList.add('active');
-
-            const newConfirmBtn = document.getElementById('popupConfirmBtn');
-            const cancelBtn = document.getElementById('popupCancelBtn');
-
-            const handleConfirm = function() {
-                popup.classList.remove('active');
-                actions.innerHTML = `<button class="btn-primary" id="popupConfirmBtn">OK</button>`;
-                // ✅ FIX: Small delay to ensure popup is closed
-                setTimeout(() => {
-                    if (onConfirm) onConfirm();
-                }, 100);
-            };
-            
-            const handleCancel = function() {
-                popup.classList.remove('active');
-                actions.innerHTML = `<button class="btn-primary" id="popupConfirmBtn">OK</button>`;
-                if (onCancel) onCancel();
-            };
-
-            newConfirmBtn.addEventListener('click', handleConfirm);
-            cancelBtn.addEventListener('click', handleCancel);
-            closeBtn.addEventListener('click', handleCancel);
-            popup.addEventListener('click', function(e) {
-                if (e.target === this) {
-                    popup.classList.remove('active');
-                    actions.innerHTML = `<button class="btn-primary" id="popupConfirmBtn">OK</button>`;
-                    if (onCancel) onCancel();
-                }
-            });
-        }
-
-        // ============================================================
         // AUTH STATE
         // ============================================================
         let isAdmin = false;
@@ -1806,7 +1753,7 @@
         }
 
         // ============================================================
-        // OPEN DIAMOND POPUP
+        // ✅ FIXED: OPEN DIAMOND POPUP
         // ============================================================
         async function openDiamondPopup(userId) {
             selectedUserId = userId;
@@ -1818,6 +1765,7 @@
                     return;
                 }
 
+                // ✅ Store fresh data
                 selectedUserData = doc.data();
                 const total = (selectedUserData.totalDiamonds || 0) +
                     (selectedUserData.referralBonus || 0) +
@@ -1848,7 +1796,7 @@
         }
 
         // ============================================================
-        // CONFIRM ADD DIAMONDS
+        // ✅ FIXED: CONFIRM ADD DIAMONDS - Pehly confirmation popup
         // ============================================================
         function confirmAddDiamonds() {
             const amount = parseInt(document.getElementById('diamondAmount').value);
@@ -1859,14 +1807,25 @@
 
             pendingAmount = amount;
             pendingAction = 'add';
+            
+            // ✅ Pehly confirmation popup
             showConfirmPopup(
                 `Add ${amount.toLocaleString()} diamonds?`,
-                `This will add ${amount.toLocaleString()} diamonds to ${selectedUserData.displayName || 'User'}'s account.`
+                `This will add ${amount.toLocaleString()} diamonds to ${selectedUserData.displayName || 'User'}'s account.`,
+                function() {
+                    // ✅ Confirm ke baad action execute ho
+                    executeAction();
+                },
+                function() {
+                    // Cancel
+                    pendingAction = null;
+                    pendingAmount = 0;
+                }
             );
         }
 
         // ============================================================
-        // CONFIRM REMOVE DIAMONDS
+        // ✅ FIXED: CONFIRM REMOVE DIAMONDS - Pehly confirmation popup
         // ============================================================
         function confirmRemoveDiamonds() {
             const amount = parseInt(document.getElementById('diamondAmount').value);
@@ -1887,14 +1846,25 @@
 
             pendingAmount = amount;
             pendingAction = 'remove';
+            
+            // ✅ Pehly confirmation popup
             showConfirmPopup(
                 `Remove ${amount.toLocaleString()} diamonds?`,
-                `This will remove ${amount.toLocaleString()} diamonds from ${selectedUserData.displayName || 'User'}'s account.`
+                `This will remove ${amount.toLocaleString()} diamonds from ${selectedUserData.displayName || 'User'}'s account.`,
+                function() {
+                    // ✅ Confirm ke baad action execute ho
+                    executeAction();
+                },
+                function() {
+                    // Cancel
+                    pendingAction = null;
+                    pendingAmount = 0;
+                }
             );
         }
 
         // ============================================================
-        // CONFIRM SET BALANCE
+        // ✅ FIXED: CONFIRM SET BALANCE - Pehly confirmation popup
         // ============================================================
         function confirmSetBalance() {
             const amount = parseInt(document.getElementById('diamondAmount').value);
@@ -1905,27 +1875,78 @@
 
             pendingAmount = amount;
             pendingAction = 'set';
+            
+            // ✅ Pehly confirmation popup
             showConfirmPopup(
                 `Set balance to ${amount.toLocaleString()} diamonds?`,
-                `This will set ${selectedUserData.displayName || 'User'}'s balance to ${amount.toLocaleString()} diamonds.`
+                `This will set ${selectedUserData.displayName || 'User'}'s balance to ${amount.toLocaleString()} diamonds.`,
+                function() {
+                    // ✅ Confirm ke baad action execute ho
+                    executeAction();
+                },
+                function() {
+                    // Cancel
+                    pendingAction = null;
+                    pendingAmount = 0;
+                }
             );
         }
 
         // ============================================================
-        // CLOSE CONFIRM POPUP
+        // ✅ FIXED: SHOW CONFIRM POPUP (Simple - no callback issues)
         // ============================================================
-        function closeConfirmPopup() {
-            document.getElementById('confirmPopup').classList.remove('active');
-            pendingAction = null;
-            pendingAmount = 0;
+        function showConfirmPopup(title, message, onConfirm, onCancel) {
+            const popup = document.getElementById('customPopup');
+            const icon = document.getElementById('popupIcon');
+            const titleEl = document.getElementById('popupTitle');
+            const msgEl = document.getElementById('popupMessage');
+            const actions = document.getElementById('popupActions');
+            const closeBtn = document.getElementById('popupCloseBtn');
+
+            icon.textContent = '❓';
+            icon.className = 'popup-icon warning';
+            titleEl.textContent = title;
+            msgEl.textContent = message;
+            actions.innerHTML = `
+                    <button class="btn-secondary" id="popupCancelBtn">Cancel</button>
+                    <button class="btn-danger" id="popupConfirmBtn">Confirm</button>
+                `;
+
+            popup.classList.add('active');
+
+            const newConfirmBtn = document.getElementById('popupConfirmBtn');
+            const cancelBtn = document.getElementById('popupCancelBtn');
+
+            // ✅ Remove old listeners to avoid duplicates
+            const handleConfirm = function() {
+                popup.classList.remove('active');
+                actions.innerHTML = `<button class="btn-primary" id="popupConfirmBtn">OK</button>`;
+                if (onConfirm) onConfirm();
+            };
+
+            const handleCancel = function() {
+                popup.classList.remove('active');
+                actions.innerHTML = `<button class="btn-primary" id="popupConfirmBtn">OK</button>`;
+                if (onCancel) onCancel();
+            };
+
+            newConfirmBtn.onclick = handleConfirm;
+            cancelBtn.onclick = handleCancel;
+            closeBtn.onclick = handleCancel;
+            
+            popup.onclick = function(e) {
+                if (e.target === this) {
+                    popup.classList.remove('active');
+                    actions.innerHTML = `<button class="btn-primary" id="popupConfirmBtn">OK</button>`;
+                    if (onCancel) onCancel();
+                }
+            };
         }
 
         // ============================================================
-        // ✅ FIXED: CONFIRM ACTION - Fresh data fetch + proper error handling
+        // ✅ FIXED: EXECUTE ACTION - Fresh data fetch
         // ============================================================
-        async function confirmAction() {
-            closeConfirmPopup();
-
+        async function executeAction() {
             if (!selectedUserId || !pendingAction) {
                 showToast('Missing user or action', 'error');
                 return;
@@ -1934,7 +1955,7 @@
             try {
                 console.log('🔵 Processing action:', pendingAction, 'Amount:', pendingAmount, 'User:', selectedUserId);
 
-                // ✅ FIX: Fresh data fetch karein
+                // ✅ CRITICAL FIX: Always fetch fresh data
                 const freshDoc = await db.collection('users').doc(selectedUserId).get();
                 if (!freshDoc.exists) {
                     showToast('User not found', 'error');
@@ -1949,7 +1970,7 @@
                 if (pendingAction === 'add') {
                     updateData.totalDiamonds = firebase.firestore.FieldValue.increment(pendingAmount);
                     message = `✅ ${pendingAmount.toLocaleString()} diamonds added!`;
-                    console.log('📌 Adding', pendingAmount, 'to main balance');
+                    console.log('📌 Adding', pendingAmount, 'to totalDiamonds');
 
                 } else if (pendingAction === 'remove') {
                     let remaining = pendingAmount;
@@ -2005,7 +2026,7 @@
                     showToast('No changes made', 'info');
                 }
 
-                // ✅ Refresh data
+                // ✅ Refresh all data
                 setTimeout(() => {
                     loadAllUsers();
                     loadStats();
@@ -2015,6 +2036,7 @@
 
             } catch (error) {
                 console.error('❌ Action error:', error);
+                console.error('❌ Error details:', error.message, error.code);
                 showToast(`❌ Error: ${error.message}`, 'error');
             }
 
