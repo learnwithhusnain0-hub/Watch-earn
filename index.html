@@ -345,7 +345,7 @@
 
         .ticker-content {
             display: inline-block;
-            animation: scrollTicker 30s linear infinite;
+            animation: scrollTicker 45s linear infinite;
         }
 
         .ticker-item {
@@ -4018,33 +4018,40 @@
         }
 
         // ============================================================
-        // WITHDRAW TICKER (MARQUEE)
+        // WITHDRAW TICKER (MARQUEE) - LIVE DATA FROM FIRESTORE
         // ============================================================
-        const WITHDRAW_TICKER_DATA = [
-            { name: "Husnain", amount: 13000 },
-            { name: "Ahmed", amount: 15500 },
-            { name: "Ali", amount: 12500 },
-            { name: "Sara", amount: 18000 },
-            { name: "Zain", amount: 14200 },
-            { name: "Fatima", amount: 16000 },
-            { name: "Omar", amount: 22000 },
-            { name: "Ayesha", amount: 19800 },
-            { name: "Bilal", amount: 21000 },
-            { name: "Hira", amount: 17500 },
-            { name: "Usman", amount: 16500 },
-            { name: "Nadia", amount: 19000 }
-        ];
-
         async function loadWithdrawTicker() {
             try {
-                // Filter: Only > 12,000 PKR
-                const filtered = WITHDRAW_TICKER_DATA.filter(item => item.amount > 12000);
+                // ✅ Get all users and their approved withdrawals
+                const snapshot = await db.collection('users').get();
+                let allWithdrawals = [];
+
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    if (data.withdrawals && Array.isArray(data.withdrawals)) {
+                        data.withdrawals.forEach(w => {
+                            // ✅ Only approved withdrawals
+                            if (w.status === 'approved' && w.amount > 0) {
+                                allWithdrawals.push({
+                                    name: data.displayName || 'User',
+                                    amount: w.amount || 0,
+                                    currency: 'PKR',
+                                    userId: doc.id
+                                });
+                            }
+                        });
+                    }
+                });
+
+                // ✅ Filter: Only > 12,000 PKR
+                const filtered = allWithdrawals.filter(item => item.amount > 12000);
+                
                 // Shuffle
                 const shuffled = filtered.sort(() => Math.random() - .5);
 
                 if (shuffled.length === 0) {
                     tickerContent.innerHTML =
-                    '<span class="ticker-item"><i class="fas fa-trophy trophy"></i>No withdrawals yet</span>';
+                        '<span class="ticker-item"><i class="fas fa-trophy trophy"></i>No withdrawals yet</span>';
                     return;
                 }
 
@@ -4418,8 +4425,9 @@
         console.log('📌 Withdraw: Minimum 15,000 💎');
         console.log('📌 Referral: 1000 💎 to new user, 50 💎 to referrer (ONE TIME)');
         console.log('📌 Device: 1 account per device');
-        console.log('📌 Ticker: Showing withdrawals > 12,000 PKR');
+        console.log('📌 Ticker: Live data from Firestore > 12,000 PKR');
         console.log('📌 Progress Ring: Removed');
+        console.log('📌 Ticker Speed: 45s');
     </script>
 
 </body>
