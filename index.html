@@ -35,7 +35,7 @@
 
     <style>
         /* ============================================================
-           COMPLETE STYLES - WATCH & EARN PAGE (MOBILE FRIENDLY)
+           COMPLETE STYLES - WATCH & EARN PAGE
            ============================================================ */
         * {
             margin: 0;
@@ -52,6 +52,7 @@
             scroll-behavior: smooth;
             -webkit-font-smoothing: antialiased;
             min-height: 100vh;
+            padding-bottom: 70px;
         }
 
         a {
@@ -59,7 +60,6 @@
             color: inherit;
         }
 
-        /* ---------- ANIMATED BACKGROUND ---------- */
         .bg-animation {
             position: fixed;
             top: 0;
@@ -302,49 +302,70 @@
         /* ---------- MAIN CONTENT ---------- */
         .main-content {
             padding-top: 70px;
-            min-height: 100vh;
+            min-height: calc(100vh - 140px);
+        }
+
+        /* ---------- TABS CONTENT ---------- */
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         /* ---------- WATCH & EARN HERO ---------- */
         .watch-hero {
             text-align: center;
-            padding: 16px 0 12px;
+            padding: 10px 0 8px;
         }
 
         .watch-hero h1 {
             font-family: 'Bebas Neue', sans-serif;
-            font-size: clamp(2rem, 8vw, 3.5rem);
+            font-size: clamp(1.8rem, 7vw, 3rem);
             color: #FFD700;
             letter-spacing: 2px;
         }
 
         .watch-hero .sub-title {
             color: #aaa;
-            font-size: 0.85rem;
-            margin-top: 4px;
+            font-size: 0.8rem;
+            margin-top: 2px;
         }
 
         .watch-hero .diamond-badge {
             display: inline-block;
             background: rgba(255, 215, 0, 0.1);
             border: 1px solid rgba(255, 215, 0, 0.25);
-            padding: 6px 18px;
+            padding: 4px 14px;
             border-radius: 50px;
-            margin-top: 10px;
-            font-size: 0.8rem;
+            margin-top: 6px;
+            font-size: 0.75rem;
             color: #FFD700;
         }
 
         .watch-hero .diamond-badge i {
-            margin-right: 6px;
+            margin-right: 4px;
         }
 
         /* ---------- STATS CARDS ---------- */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-            margin: 16px 0 20px;
+            gap: 8px;
+            margin: 10px 0 14px;
         }
 
         @media (min-width: 500px) {
@@ -357,8 +378,8 @@
             background: rgba(20, 20, 18, 0.7);
             backdrop-filter: blur(8px);
             border: 1px solid rgba(255, 215, 0, 0.08);
-            border-radius: 16px;
-            padding: 14px 10px;
+            border-radius: 14px;
+            padding: 10px 8px;
             text-align: center;
             transition: 0.3s;
         }
@@ -368,20 +389,20 @@
         }
 
         .stat-card .stat-icon {
-            font-size: 1.6rem;
+            font-size: 1.3rem;
             color: #FFD700;
-            margin-bottom: 2px;
+            margin-bottom: 1px;
         }
 
         .stat-card .stat-value {
             font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.6rem;
+            font-size: 1.4rem;
             color: #fff;
             line-height: 1.2;
         }
 
         .stat-card .stat-label {
-            font-size: 0.6rem;
+            font-size: 0.55rem;
             color: #888;
             text-transform: uppercase;
             letter-spacing: 0.5px;
@@ -390,34 +411,34 @@
         .stat-card .stat-diamond {
             display: inline-block;
             background: rgba(255, 215, 0, 0.1);
-            padding: 1px 10px;
+            padding: 1px 8px;
             border-radius: 20px;
-            font-size: 0.65rem;
+            font-size: 0.6rem;
             color: #FFD700;
             margin-top: 2px;
         }
 
-        /* ---------- PROGRESS RING - MOBILE FIXED ---------- */
+        /* ---------- PROGRESS RING ---------- */
         .progress-ring-container {
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 16px;
-            margin: 16px 0 20px;
+            gap: 12px;
+            margin: 10px 0 14px;
             flex-wrap: wrap;
         }
 
         .progress-ring {
             position: relative;
-            width: 100px;
-            height: 100px;
+            width: 80px;
+            height: 80px;
             flex-shrink: 0;
         }
 
         @media (min-width: 500px) {
             .progress-ring {
-                width: 120px;
-                height: 120px;
+                width: 100px;
+                height: 100px;
             }
         }
 
@@ -452,13 +473,13 @@
 
         .progress-ring .center-text .number {
             font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.6rem;
+            font-size: 1.2rem;
             color: #FFD700;
             line-height: 1;
         }
 
         .progress-ring .center-text .label {
-            font-size: 0.5rem;
+            font-size: 0.4rem;
             color: #888;
             text-transform: uppercase;
             letter-spacing: 0.5px;
@@ -467,31 +488,31 @@
 
         @media (min-width: 500px) {
             .progress-ring .center-text .number {
-                font-size: 2rem;
+                font-size: 1.6rem;
             }
             .progress-ring .center-text .label {
-                font-size: 0.6rem;
+                font-size: 0.5rem;
             }
         }
 
         .progress-info {
             text-align: center;
             color: #888;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
         }
 
         .progress-info .big-text {
-            font-size: 1rem;
+            font-size: 0.9rem;
             color: #FFD700;
             font-weight: 700;
         }
 
         @media (max-width: 400px) {
             .progress-info .big-text {
-                font-size: 0.85rem;
+                font-size: 0.8rem;
             }
             .progress-info {
-                font-size: 0.7rem;
+                font-size: 0.65rem;
             }
         }
 
@@ -500,9 +521,9 @@
             background: rgba(18, 18, 16, 0.82);
             backdrop-filter: blur(14px);
             border-radius: 20px;
-            padding: 20px 16px;
+            padding: 18px 14px;
             border: 1px solid rgba(255, 215, 0, 0.15);
-            margin-bottom: 20px;
+            margin-bottom: 16px;
         }
 
         .ad-section .section-header {
@@ -510,21 +531,21 @@
             align-items: center;
             justify-content: space-between;
             flex-wrap: wrap;
-            gap: 8px;
-            margin-bottom: 14px;
+            gap: 6px;
+            margin-bottom: 10px;
         }
 
         .ad-section .section-header h2 {
             font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.4rem;
+            font-size: 1.2rem;
             color: #FFD700;
         }
 
         .ad-section .section-header .ad-counter {
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             color: #aaa;
             background: rgba(255, 255, 255, 0.05);
-            padding: 4px 12px;
+            padding: 3px 10px;
             border-radius: 30px;
         }
 
@@ -535,9 +556,9 @@
 
         .ad-display {
             background: rgba(0, 0, 0, 0.4);
-            border-radius: 16px;
-            padding: 20px 14px;
-            min-height: 150px;
+            border-radius: 14px;
+            padding: 16px 12px;
+            min-height: 120px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -559,24 +580,24 @@
         }
 
         .ad-display .ad-placeholder i {
-            font-size: 2.5rem;
-            margin-bottom: 8px;
+            font-size: 2rem;
+            margin-bottom: 6px;
             display: block;
             color: #333;
         }
 
         .ad-display .ad-placeholder p {
-            font-size: 0.85rem;
+            font-size: 0.8rem;
         }
 
         .ad-display .ad-timer {
             position: absolute;
-            top: 10px;
-            right: 12px;
+            top: 8px;
+            right: 10px;
             background: rgba(0, 0, 0, 0.85);
-            padding: 4px 14px;
+            padding: 3px 12px;
             border-radius: 30px;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             color: #FFD700;
             border: 1px solid rgba(255, 215, 0, 0.2);
             display: none;
@@ -603,24 +624,24 @@
 
         .ad-controls {
             display: flex;
-            gap: 10px;
-            margin-top: 16px;
+            gap: 8px;
+            margin-top: 12px;
             flex-wrap: wrap;
             justify-content: center;
         }
 
         .ad-controls button {
-            padding: 12px 24px;
+            padding: 10px 20px;
             border-radius: 30px;
             border: none;
             font-weight: 700;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             cursor: pointer;
             transition: 0.3s;
             font-family: 'Montserrat', sans-serif;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
         }
 
         .ad-controls .btn-watch {
@@ -640,15 +661,15 @@
             transform: none;
         }
 
-        .ad-controls .btn-watch.watching {
-            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
-            color: #fff;
-            animation: pulseBtn 1.2s ease-in-out infinite;
-        }
-
         .ad-controls .btn-watch.redirecting {
             background: linear-gradient(135deg, #4CAF50, #388E3C);
             color: #fff;
+        }
+
+        .ad-controls .btn-watch.continue-btn {
+            background: linear-gradient(135deg, #FF6B35, #E85D2C);
+            color: #fff;
+            animation: pulseBtn 1.5s ease-in-out infinite;
         }
 
         @keyframes pulseBtn {
@@ -683,7 +704,7 @@
             height: 4px;
             background: rgba(255, 255, 255, 0.05);
             border-radius: 10px;
-            margin-top: 12px;
+            margin-top: 10px;
             overflow: hidden;
         }
 
@@ -692,30 +713,61 @@
             background: linear-gradient(90deg, #FFD700, #FFA500);
             border-radius: 10px;
             width: 0%;
-            transition: width 0.5s ease;
+            transition: width 0.3s ease;
+        }
+
+        /* ---------- BALANCE DISPLAY ---------- */
+        .balance-display {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            padding: 8px 12px;
+            background: rgba(255, 215, 0, 0.04);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 215, 0, 0.06);
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+
+        .balance-display .item {
+            text-align: center;
+        }
+
+        .balance-display .item .value {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.2rem;
+            color: #FFD700;
+        }
+
+        .balance-display .item .label {
+            font-size: 0.55rem;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: block;
         }
 
         /* ---------- DAILY LIMIT INFO ---------- */
         .daily-limit-info {
             display: flex;
             align-items: center;
-            gap: 10px;
-            padding: 10px 14px;
-            border-radius: 14px;
+            gap: 8px;
+            padding: 8px 12px;
+            border-radius: 12px;
             background: rgba(255, 215, 0, 0.04);
             border: 1px solid rgba(255, 215, 0, 0.08);
-            margin-top: 14px;
+            margin-top: 10px;
             flex-wrap: wrap;
         }
 
         .daily-limit-info i {
             color: #FFD700;
-            font-size: 1rem;
+            font-size: 0.9rem;
         }
 
         .daily-limit-info .limit-text {
             flex: 1;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             color: #aaa;
         }
 
@@ -725,7 +777,7 @@
         }
 
         .daily-limit-info .limit-progress {
-            width: 80px;
+            width: 60px;
             height: 4px;
             background: rgba(255, 255, 255, 0.05);
             border-radius: 10px;
@@ -741,46 +793,46 @@
 
         @media (max-width: 400px) {
             .daily-limit-info .limit-progress {
-                width: 60px;
+                width: 50px;
             }
             .daily-limit-info .limit-text {
-                font-size: 0.65rem;
+                font-size: 0.6rem;
             }
         }
 
-        /* ---------- WITHDRAW SECTION ---------- */
-        .withdraw-section {
+        /* ---------- WITHDRAW TAB SECTION ---------- */
+        .withdraw-tab-section {
             background: rgba(18, 18, 16, 0.82);
             backdrop-filter: blur(14px);
             border-radius: 20px;
-            padding: 20px 16px;
+            padding: 18px 14px;
             border: 1px solid rgba(255, 215, 0, 0.15);
-            margin-bottom: 20px;
+            margin-bottom: 16px;
         }
 
-        .withdraw-section h2 {
+        .withdraw-tab-section h2 {
             font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             color: #FFD700;
-            margin-bottom: 4px;
+            margin-bottom: 2px;
         }
 
-        .withdraw-section .withdraw-sub {
+        .withdraw-tab-section .withdraw-sub {
             color: #888;
-            font-size: 0.8rem;
-            margin-bottom: 14px;
+            font-size: 0.7rem;
+            margin-bottom: 12px;
         }
 
         .withdraw-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 12px;
+            gap: 10px;
         }
 
         .withdraw-grid .form-group {
             display: flex;
             flex-direction: column;
-            gap: 3px;
+            gap: 2px;
         }
 
         .withdraw-grid .form-group.full-width {
@@ -788,7 +840,7 @@
         }
 
         .withdraw-grid .form-group label {
-            font-size: 0.65rem;
+            font-size: 0.6rem;
             font-weight: 600;
             color: #aaa;
             letter-spacing: 0.5px;
@@ -802,15 +854,15 @@
 
         .withdraw-grid .form-group input,
         .withdraw-grid .form-group select {
-            padding: 12px 14px;
-            border-radius: 14px;
+            padding: 10px 12px;
+            border-radius: 12px;
             border: 1px solid rgba(255, 215, 0, 0.15);
             background: rgba(0, 0, 0, 0.4);
             color: #fff;
             font-weight: 500;
             outline: none;
             transition: 0.3s;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             font-family: 'Montserrat', sans-serif;
             width: 100%;
         }
@@ -832,12 +884,64 @@
             cursor: not-allowed;
         }
 
-        .withdraw-status {
-            padding: 12px 14px;
-            border-radius: 14px;
-            margin-top: 12px;
+        .withdraw-balance {
+            grid-column: 1 / -1;
             text-align: center;
-            font-size: 0.85rem;
+            padding: 6px;
+            background: rgba(255, 215, 0, 0.04);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 215, 0, 0.06);
+        }
+
+        .withdraw-balance .label {
+            font-size: 0.6rem;
+            color: #888;
+            text-transform: uppercase;
+        }
+
+        .withdraw-balance .value {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.6rem;
+            color: #FFD700;
+        }
+
+        .btn-withdraw {
+            grid-column: 1 / -1;
+            padding: 12px 24px;
+            border-radius: 60px;
+            border: none;
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: 0.3s;
+            font-family: 'Montserrat', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            background: linear-gradient(135deg, #FFD700, #e6b800);
+            color: #0a0a0a;
+            box-shadow: 0 8px 28px rgba(255, 215, 0, 0.15);
+        }
+
+        .btn-withdraw:hover:not(:disabled) {
+            transform: scale(1.02);
+            box-shadow: 0 8px 35px rgba(255, 215, 0, 0.25);
+        }
+
+        .btn-withdraw:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* ---------- WITHDRAW STATUS ---------- */
+        .withdraw-status {
+            padding: 10px 12px;
+            border-radius: 12px;
+            margin-top: 10px;
+            text-align: center;
+            font-size: 0.8rem;
             display: none;
         }
 
@@ -862,34 +966,91 @@
             color: #FFD700;
         }
 
-        .btn-withdraw {
-            grid-column: 1 / -1;
-            padding: 14px 32px;
-            border-radius: 60px;
-            border: none;
-            font-weight: 700;
-            font-size: 0.95rem;
-            cursor: pointer;
-            transition: 0.3s;
-            font-family: 'Montserrat', sans-serif;
+        /* ---------- WITHDRAWAL HISTORY ---------- */
+        .history-section {
+            margin-top: 12px;
+            border-top: 1px solid rgba(255, 215, 0, 0.06);
+            padding-top: 10px;
+        }
+
+        .history-section h3 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1rem;
+            color: #FFD700;
+            margin-bottom: 8px;
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 8px;
-            background: linear-gradient(135deg, #FFD700, #e6b800);
-            color: #0a0a0a;
-            box-shadow: 0 8px 28px rgba(255, 215, 0, 0.15);
+            gap: 6px;
         }
 
-        .btn-withdraw:hover:not(:disabled) {
-            transform: scale(1.02);
-            box-shadow: 0 8px 35px rgba(255, 215, 0, 0.25);
+        .history-list {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            max-height: 120px;
+            overflow-y: auto;
         }
 
-        .btn-withdraw:disabled {
-            opacity: 0.4;
-            cursor: not-allowed;
-            transform: none;
+        .history-list::-webkit-scrollbar {
+            width: 3px;
+        }
+        .history-list::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 10px;
+        }
+        .history-list::-webkit-scrollbar-thumb {
+            background: rgba(255, 215, 0, 0.2);
+            border-radius: 10px;
+        }
+
+        .history-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 6px 10px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 8px;
+            font-size: 0.7rem;
+        }
+
+        .history-item .h-amount {
+            font-weight: 700;
+            color: #FFD700;
+        }
+
+        .history-item .h-status {
+            font-size: 0.6rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            padding: 2px 8px;
+            border-radius: 20px;
+        }
+
+        .history-item .h-status.pending {
+            background: rgba(255, 68, 68, 0.12);
+            color: #ff4444;
+        }
+
+        .history-item .h-status.approved {
+            background: rgba(76, 175, 80, 0.12);
+            color: #4CAF50;
+        }
+
+        .history-item .h-status.rejected {
+            background: rgba(255, 68, 68, 0.08);
+            color: #888;
+        }
+
+        .history-item .h-date {
+            color: #555;
+            font-size: 0.6rem;
+        }
+
+        .history-empty {
+            text-align: center;
+            color: #555;
+            font-size: 0.75rem;
+            padding: 10px 0;
         }
 
         /* ---------- LEADERBOARD ---------- */
@@ -897,38 +1058,38 @@
             background: rgba(18, 18, 16, 0.82);
             backdrop-filter: blur(14px);
             border-radius: 20px;
-            padding: 20px 16px;
+            padding: 16px 14px;
             border: 1px solid rgba(255, 215, 0, 0.15);
-            margin-bottom: 20px;
+            margin-bottom: 16px;
         }
 
         .leaderboard-section h2 {
             font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             color: #FFD700;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
         }
 
         .leaderboard-section h2 i {
-            font-size: 1.2rem;
+            font-size: 1rem;
         }
 
         .leaderboard-list {
             display: flex;
             flex-direction: column;
-            gap: 6px;
+            gap: 4px;
         }
 
         .leaderboard-item {
             display: flex;
             align-items: center;
-            gap: 10px;
-            padding: 8px 12px;
+            gap: 8px;
+            padding: 6px 10px;
             background: rgba(255, 255, 255, 0.02);
-            border-radius: 12px;
+            border-radius: 10px;
             transition: 0.3s;
             border: 1px solid transparent;
         }
@@ -940,9 +1101,9 @@
 
         .leaderboard-item .rank {
             font-weight: 700;
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             color: #555;
-            min-width: 26px;
+            min-width: 22px;
             text-align: center;
         }
 
@@ -957,8 +1118,8 @@
         }
 
         .leaderboard-item .avatar {
-            width: 30px;
-            height: 30px;
+            width: 26px;
+            height: 26px;
             border-radius: 50%;
             background: rgba(255, 215, 0, 0.1);
             display: flex;
@@ -966,7 +1127,7 @@
             justify-content: center;
             font-weight: 700;
             color: #FFD700;
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             flex-shrink: 0;
         }
 
@@ -976,23 +1137,127 @@
 
         .leaderboard-item .info .name {
             font-weight: 600;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
         }
 
         .leaderboard-item .info .detail {
-            font-size: 0.6rem;
+            font-size: 0.55rem;
             color: #666;
         }
 
         .leaderboard-item .points {
             font-family: 'Bebas Neue', sans-serif;
-            font-size: 1rem;
+            font-size: 0.9rem;
             color: #FFD700;
         }
 
         .leaderboard-item .points i {
-            font-size: 0.7rem;
+            font-size: 0.6rem;
             margin-right: 2px;
+        }
+
+        /* ============================================================
+           BOTTOM NAVIGATION - FULLY WORKING
+           ============================================================ */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255, 215, 0, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            padding: 6px 0 env(safe-area-inset-bottom, 6px) 0;
+            height: 62px;
+        }
+
+        .bottom-nav .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 2px;
+            padding: 4px 16px;
+            border: none;
+            background: transparent;
+            color: #666;
+            cursor: pointer;
+            transition: 0.3s;
+            font-family: 'Montserrat', sans-serif;
+            position: relative;
+            min-width: 60px;
+        }
+
+        .bottom-nav .nav-item i {
+            font-size: 1.3rem;
+            transition: 0.3s;
+        }
+
+        .bottom-nav .nav-item span {
+            font-size: 0.55rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: 0.3s;
+        }
+
+        .bottom-nav .nav-item.active {
+            color: #FFD700;
+        }
+
+        .bottom-nav .nav-item.active i {
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+        }
+
+        .bottom-nav .nav-item.active::before {
+            content: '';
+            position: absolute;
+            top: -1px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30px;
+            height: 3px;
+            background: linear-gradient(90deg, #FFD700, #FFA500);
+            border-radius: 0 0 4px 4px;
+        }
+
+        .bottom-nav .nav-item:hover {
+            color: #FFD700;
+        }
+
+        .bottom-nav .nav-item .nav-badge {
+            position: absolute;
+            top: 0;
+            right: 4px;
+            background: #ff4444;
+            color: #fff;
+            font-size: 0.5rem;
+            font-weight: 700;
+            padding: 1px 6px;
+            border-radius: 20px;
+            min-width: 16px;
+            text-align: center;
+        }
+
+        @media (max-width: 400px) {
+            .bottom-nav .nav-item {
+                padding: 4px 10px;
+                min-width: 50px;
+            }
+            .bottom-nav .nav-item i {
+                font-size: 1.1rem;
+            }
+            .bottom-nav .nav-item span {
+                font-size: 0.5rem;
+            }
+            .bottom-nav {
+                height: 56px;
+            }
         }
 
         /* ---------- LOADING SCREEN ---------- */
@@ -1019,8 +1284,8 @@
 
         .loader-spinner {
             position: relative;
-            width: 120px;
-            height: 120px;
+            width: 100px;
+            height: 100px;
         }
 
         .loader-spinner .ring-1 {
@@ -1070,7 +1335,7 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            font-size: 2rem;
+            font-size: 1.8rem;
             color: #FFD700;
             animation: pulseCenter 1.8s ease-in-out infinite;
             z-index: 2;
@@ -1115,10 +1380,10 @@
 
         .loader-brand {
             font-family: 'Bebas Neue', 'Arial Black', sans-serif;
-            font-size: 2rem;
+            font-size: 1.8rem;
             color: #FFD700;
-            letter-spacing: 6px;
-            margin-top: 30px;
+            letter-spacing: 4px;
+            margin-top: 24px;
             animation: fadeText 1.6s ease-in-out infinite alternate;
             text-shadow: 0 0 30px rgba(255, 215, 0, 0.1);
         }
@@ -1126,22 +1391,22 @@
         @keyframes fadeText {
             0% {
                 opacity: 0.5;
-                letter-spacing: 6px;
+                letter-spacing: 4px;
                 transform: scale(0.98);
             }
             100% {
                 opacity: 1;
-                letter-spacing: 10px;
+                letter-spacing: 8px;
                 transform: scale(1.02);
             }
         }
 
         .loader-progress {
-            width: 160px;
+            width: 140px;
             height: 3px;
             background: rgba(255, 215, 0, 0.08);
             border-radius: 10px;
-            margin-top: 16px;
+            margin-top: 14px;
             overflow: hidden;
             position: relative;
         }
@@ -1192,11 +1457,11 @@
         }
 
         .custom-popup {
-            max-width: 400px;
+            max-width: 380px;
             width: 100%;
             background: rgba(20, 20, 18, 0.95);
             border-radius: 24px;
-            padding: 28px 24px;
+            padding: 24px 20px;
             border: 2px solid #FFD700;
             text-align: center;
             position: relative;
@@ -1250,9 +1515,9 @@
 
         .custom-popup .popup-close {
             position: absolute;
-            top: 8px;
-            right: 12px;
-            font-size: 1.2rem;
+            top: 6px;
+            right: 10px;
+            font-size: 1.1rem;
             color: #555;
             background: transparent;
             border: none;
@@ -1266,8 +1531,8 @@
         }
 
         .custom-popup .popup-icon {
-            font-size: 3rem;
-            margin-bottom: 10px;
+            font-size: 2.5rem;
+            margin-bottom: 8px;
         }
 
         .custom-popup .popup-icon.success {
@@ -1285,31 +1550,31 @@
 
         .custom-popup h3 {
             font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.6rem;
+            font-size: 1.4rem;
             color: #FFD700;
             letter-spacing: 2px;
-            margin-bottom: 6px;
+            margin-bottom: 4px;
         }
 
         .custom-popup p {
             color: #bbb;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             line-height: 1.6;
-            margin-bottom: 16px;
+            margin-bottom: 14px;
         }
 
         .custom-popup .popup-actions {
             display: flex;
-            gap: 10px;
+            gap: 8px;
             justify-content: center;
             flex-wrap: wrap;
         }
 
         .custom-popup .popup-actions button {
-            padding: 8px 28px;
+            padding: 8px 24px;
             border-radius: 30px;
             font-weight: 700;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             cursor: pointer;
             transition: 0.3s;
             border: none;
@@ -1344,11 +1609,11 @@
         }
 
         .login-box {
-            max-width: 400px;
+            max-width: 380px;
             width: 100%;
             background: rgba(20, 20, 18, 0.95);
             border-radius: 24px;
-            padding: 32px 24px;
+            padding: 28px 20px;
             border: 2px solid #FFD700;
             text-align: center;
             position: relative;
@@ -1371,9 +1636,9 @@
 
         .login-box .close-popup {
             position: absolute;
-            top: 10px;
-            right: 14px;
-            font-size: 1.4rem;
+            top: 8px;
+            right: 12px;
+            font-size: 1.3rem;
             color: #666;
             background: transparent;
             border: none;
@@ -1391,45 +1656,45 @@
         }
 
         .login-box .logo-img {
-            width: 60px;
-            height: 60px;
-            border-radius: 14px;
-            margin-bottom: 12px;
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            margin-bottom: 10px;
             border: 2px solid rgba(255, 215, 0, 0.2);
         }
 
         .login-box h2 {
             font-family: 'Bebas Neue', sans-serif;
             color: #FFD700;
-            font-size: 1.8rem;
+            font-size: 1.6rem;
             letter-spacing: 2px;
         }
 
         .login-box .sub-text {
             color: #999;
-            font-size: 0.85rem;
-            margin: 6px 0 16px;
+            font-size: 0.8rem;
+            margin: 4px 0 12px;
         }
 
         .login-tabs {
             display: flex;
-            gap: 6px;
-            margin-bottom: 16px;
+            gap: 4px;
+            margin-bottom: 12px;
             background: rgba(255, 255, 255, 0.03);
-            border-radius: 14px;
+            border-radius: 12px;
             padding: 4px;
         }
 
         .login-tabs button {
             flex: 1;
-            padding: 8px;
+            padding: 6px;
             border: none;
-            border-radius: 10px;
+            border-radius: 8px;
             background: transparent;
             color: #888;
             font-family: 'Montserrat', sans-serif;
             font-weight: 600;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             cursor: pointer;
             transition: 0.3s;
         }
@@ -1444,27 +1709,27 @@
         }
 
         .login-box .form-group {
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             text-align: left;
         }
 
         .login-box .form-group label {
             display: block;
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             color: #aaa;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            margin-bottom: 3px;
+            margin-bottom: 2px;
         }
 
         .login-box .form-group input {
             width: 100%;
-            padding: 12px 14px;
-            border-radius: 12px;
+            padding: 10px 12px;
+            border-radius: 10px;
             border: 1px solid rgba(255, 215, 0, 0.15);
             background: rgba(0, 0, 0, 0.4);
             color: #fff;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             font-family: 'Montserrat', sans-serif;
             outline: none;
             transition: 0.3s;
@@ -1484,16 +1749,16 @@
             background: linear-gradient(135deg, #FFD700, #e6b800);
             color: #0a0a0a;
             border: none;
-            padding: 12px;
+            padding: 10px;
             border-radius: 30px;
             font-weight: 700;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             cursor: pointer;
             transition: 0.3s;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
+            gap: 6px;
         }
 
         .login-box .email-btn:hover:not(:disabled) {
@@ -1511,16 +1776,16 @@
             background: linear-gradient(135deg, #4285F4, #34A853);
             color: #fff;
             border: none;
-            padding: 12px;
+            padding: 10px;
             border-radius: 30px;
             font-weight: 700;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             cursor: pointer;
             transition: 0.3s;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
+            gap: 6px;
         }
 
         .login-box .google-btn:hover {
@@ -1531,10 +1796,10 @@
         .login-box .divider {
             display: flex;
             align-items: center;
-            gap: 14px;
-            margin: 14px 0;
+            gap: 10px;
+            margin: 10px 0;
             color: #555;
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
@@ -1549,31 +1814,31 @@
 
         .login-box .error-msg {
             color: #ff4444;
-            font-size: 0.75rem;
-            margin-top: 8px;
+            font-size: 0.7rem;
+            margin-top: 6px;
             display: none;
         }
 
         .login-box .success-msg {
             color: #4CAF50;
-            font-size: 0.75rem;
-            margin-top: 8px;
+            font-size: 0.7rem;
+            margin-top: 6px;
             display: none;
         }
 
-        .tab-content {
+        .tab-content-login {
             display: none;
         }
 
-        .tab-content.active {
+        .tab-content-login.active {
             display: block;
         }
 
         .login-box .back-link {
             display: inline-block;
-            margin-top: 10px;
+            margin-top: 8px;
             color: #666;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             transition: 0.3s;
             text-decoration: none;
         }
@@ -1585,12 +1850,12 @@
         /* ---------- FLOATING WHATSAPP ---------- */
         .float-wa {
             position: fixed;
-            bottom: 20px;
-            right: 16px;
+            bottom: 76px;
+            right: 14px;
             z-index: 900;
             background: #25D366;
-            width: 48px;
-            height: 48px;
+            width: 44px;
+            height: 44px;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -1605,51 +1870,49 @@
         }
 
         .float-wa i {
-            font-size: 1.6rem;
+            font-size: 1.4rem;
             color: white;
         }
 
         /* ---------- RESPONSIVE ---------- */
         @media (max-width: 400px) {
             .ad-controls button {
-                padding: 10px 16px;
-                font-size: 0.8rem;
+                padding: 8px 14px;
+                font-size: 0.75rem;
             }
             .ad-controls {
-                gap: 6px;
+                gap: 4px;
             }
             .ad-display .ad-placeholder i {
-                font-size: 2rem;
+                font-size: 1.6rem;
             }
             .ad-display .ad-placeholder p {
-                font-size: 0.75rem;
+                font-size: 0.7rem;
             }
             .withdraw-grid {
                 grid-template-columns: 1fr;
-                gap: 10px;
+                gap: 8px;
             }
             .withdraw-grid .form-group.full-width {
                 grid-column: 1;
             }
             .btn-withdraw {
-                font-size: 0.85rem;
-                padding: 12px 20px;
+                font-size: 0.8rem;
+                padding: 10px 16px;
             }
             .custom-popup {
-                padding: 24px 16px;
+                padding: 20px 16px;
             }
             .custom-popup h3 {
-                font-size: 1.3rem;
+                font-size: 1.2rem;
             }
-        }
-
-        @media (min-width: 601px) {
-            .ad-controls button {
-                padding: 14px 36px;
-                font-size: 1rem;
+            .float-wa {
+                bottom: 70px;
+                width: 40px;
+                height: 40px;
             }
-            .withdraw-grid {
-                grid-template-columns: 1fr 1fr;
+            .float-wa i {
+                font-size: 1.2rem;
             }
         }
 
@@ -1674,40 +1937,40 @@
         }
 
         .vpn-block-box {
-            max-width: 420px;
+            max-width: 380px;
             width: 100%;
             background: rgba(20, 20, 18, 0.95);
             border-radius: 24px;
-            padding: 40px 28px;
+            padding: 32px 24px;
             border: 2px solid #ff4444;
             text-align: center;
             animation: scaleIn 0.5s cubic-bezier(0.22, 1, 0.36, 1);
         }
 
         .vpn-block-box .vpn-icon {
-            font-size: 4rem;
+            font-size: 3.5rem;
             color: #ff4444;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
         }
 
         .vpn-block-box h2 {
             font-family: 'Bebas Neue', sans-serif;
             color: #ff4444;
-            font-size: 2rem;
+            font-size: 1.8rem;
             letter-spacing: 2px;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
 
         .vpn-block-box p {
             color: #aaa;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             line-height: 1.6;
         }
 
         .vpn-block-box .vpn-sub {
             color: #666;
-            font-size: 0.8rem;
-            margin-top: 8px;
+            font-size: 0.75rem;
+            margin-top: 6px;
         }
     </style>
 </head>
@@ -1766,156 +2029,209 @@
             <img class="logo-icon" src="https://i.ibb.co/ds4SFQsf/IMG-20260615-WA0025-1.webp" alt="Logo" />
             <span class="logo-text">LEARN WITH SHAN</span>
         </div>
-        <div style="display:flex; align-items:center; gap:8px;">
+        <div style="display:flex; align-items:center; gap:6px;">
             <button class="signin-btn" id="headerSignInBtn"><i class="fas fa-sign-in-alt"></i> <span class="sign-text">Sign In</span></button>
-            <a href="index.html" style="color:#666; font-size:0.75rem; padding:4px 10px; border:1px solid rgba(255,255,255,0.05); border-radius:30px;"><i class="fas fa-arrow-left"></i></a>
+            <a href="index.html" style="color:#666; font-size:0.7rem; padding:4px 8px; border:1px solid rgba(255,255,255,0.05); border-radius:30px;"><i class="fas fa-arrow-left"></i></a>
         </div>
     </header>
 
     <!-- MAIN CONTENT -->
     <div class="main-content container">
 
-        <!-- HERO -->
-        <div class="watch-hero">
-            <h1>💎 Watch & Earn</h1>
-            <p class="sub-title">Click ads, earn diamonds, and withdraw your earnings</p>
-            <div class="diamond-badge"><i class="fas fa-gem"></i> 1 Ad = 7 Diamonds</div>
+        <!-- ========== TAB 1: HOME (Ads + Stats) ========== -->
+        <div class="tab-content active" id="tab-home">
+
+            <!-- HERO -->
+            <div class="watch-hero">
+                <h1>💎 Watch & Earn</h1>
+                <p class="sub-title">Click ads, earn diamonds, and withdraw your earnings</p>
+                <div class="diamond-badge"><i class="fas fa-gem"></i> 1 Ad = 7 Diamonds</div>
+            </div>
+
+            <!-- STATS -->
+            <div class="stats-grid" id="statsGrid">
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-gem"></i></div>
+                    <div class="stat-value" id="totalDiamonds">0</div>
+                    <div class="stat-label">Total Diamonds</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-eye"></i></div>
+                    <div class="stat-value" id="totalAdsWatched">0</div>
+                    <div class="stat-label">Ads Watched</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-calendar-day"></i></div>
+                    <div class="stat-value" id="todayAds">0</div>
+                    <div class="stat-label">Today's Ads</div>
+                    <div class="stat-diamond" id="todayLimit">0 / 20</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-trophy"></i></div>
+                    <div class="stat-value" id="rankDisplay">-</div>
+                    <div class="stat-label">Your Rank</div>
+                </div>
+            </div>
+
+            <!-- PROGRESS RING -->
+            <div class="progress-ring-container">
+                <div class="progress-ring">
+                    <svg viewBox="0 0 120 120">
+                        <circle class="circle-bg" cx="60" cy="60" r="50"/>
+                        <circle class="circle-progress" id="progressCircle" cx="60" cy="60" r="50"
+                        stroke-dasharray="314.159" stroke-dashoffset="314.159"/>
+                    </svg>
+                    <div class="center-text">
+                        <div class="number" id="progressPercent">0%</div>
+                        <span class="label">to Withdraw</span>
+                    </div>
+                </div>
+                <div class="progress-info">
+                    <div class="big-text" id="progressAdsNeeded">1 ad needed</div>
+                    <div>Watch 1 ad to unlock withdrawal</div>
+                </div>
+            </div>
+
+            <!-- AD WATCH SECTION -->
+            <div class="ad-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-play-circle" style="margin-right:4px;"></i> Watch Ad</h2>
+                    <div class="ad-counter"><i class="fas fa-gem"></i> +7 &nbsp;|&nbsp; <span id="adCounterToday">0</span>/20</div>
+                </div>
+
+                <div class="ad-display" id="adDisplay">
+                    <div class="ad-placeholder" id="adPlaceholder">
+                        <i class="fas fa-hand-pointer"></i>
+                        <p style="font-size:0.85rem; color:#888;">Click <strong style="color:#FFD700;">"Watch Ad"</strong> to start earning</p>
+                        <p style="font-size:0.65rem; color:#555; margin-top:3px;">Ad opens in new tab. Stay on ad for <strong style="color:#FFD700;">10 seconds</strong> to earn!</p>
+                    </div>
+                    <div class="ad-timer" id="adTimer"><i class="fas fa-clock"></i> <span id="timerSeconds">10</span>s</div>
+                    <div class="ad-progress" id="adProgressBar">
+                        <div class="bar" id="adProgressFill"></div>
+                    </div>
+                </div>
+
+                <div class="ad-controls">
+                    <button class="btn-watch" id="watchAdBtn"><i class="fas fa-external-link-alt"></i> Watch Ad</button>
+                    <button class="btn-next" id="nextAdBtn" disabled><i class="fas fa-forward"></i> Next</button>
+                </div>
+
+                <!-- Balance Display -->
+                <div class="balance-display">
+                    <div class="item">
+                        <span class="value" id="balanceDisplay">0</span>
+                        <span class="label">💎 Available</span>
+                    </div>
+                    <div class="item">
+                        <span class="value" id="adsDisplay">0</span>
+                        <span class="label">👁️ Ads Watched</span>
+                    </div>
+                </div>
+
+                <div class="daily-limit-info">
+                    <i class="fas fa-info-circle"></i>
+                    <div class="limit-text">
+                        Daily: <span id="dailyLimitText">0</span> / 20 ads
+                        <span style="color:#666; margin:0 4px;">|</span>
+                        <span>Earn <span style="color:#FFD700;">7 💎</span> each</span>
+                    </div>
+                    <div class="limit-progress">
+                        <div class="bar" id="dailyProgressBar" style="width:0%;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- LEADERBOARD -->
+            <div class="leaderboard-section">
+                <h2><i class="fas fa-crown"></i> Top Earners</h2>
+                <div class="leaderboard-list" id="leaderboardList">
+                    <div style="text-align:center; color:#555; padding:12px 0; font-size:0.8rem;">Loading top earners...</div>
+                </div>
+            </div>
+
         </div>
 
-        <!-- STATS -->
-        <div class="stats-grid" id="statsGrid">
-            <div class="stat-card">
-                <div class="stat-icon"><i class="fas fa-gem"></i></div>
-                <div class="stat-value" id="totalDiamonds">0</div>
-                <div class="stat-label">Total Diamonds</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon"><i class="fas fa-eye"></i></div>
-                <div class="stat-value" id="totalAdsWatched">0</div>
-                <div class="stat-label">Ads Watched</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon"><i class="fas fa-calendar-day"></i></div>
-                <div class="stat-value" id="todayAds">0</div>
-                <div class="stat-label">Today's Ads</div>
-                <div class="stat-diamond" id="todayLimit">0 / 20</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon"><i class="fas fa-trophy"></i></div>
-                <div class="stat-value" id="rankDisplay">-</div>
-                <div class="stat-label">Your Rank</div>
-            </div>
-        </div>
+        <!-- ========== TAB 2: WITHDRAW ========== -->
+        <div class="tab-content" id="tab-withdraw">
 
-        <!-- PROGRESS RING - MOBILE FIXED -->
-        <div class="progress-ring-container">
-            <div class="progress-ring">
-                <svg viewBox="0 0 120 120">
-                    <circle class="circle-bg" cx="60" cy="60" r="50"/>
-                    <circle class="circle-progress" id="progressCircle" cx="60" cy="60" r="50"
-                    stroke-dasharray="314.159" stroke-dashoffset="314.159"/>
-                </svg>
-                <div class="center-text">
-                    <div class="number" id="progressPercent">0%</div>
-                    <span class="label">to Withdraw</span>
+            <div class="withdraw-tab-section">
+                <h2>💰 Withdraw Earnings</h2>
+                <p class="withdraw-sub">Minimum 01 ad required. Withdrawals processed within 24 hours.</p>
+
+                <div class="withdraw-grid">
+                    <!-- Personal Info -->
+                    <div class="form-group">
+                        <label>Full Name <span class="required">*</span></label>
+                        <input type="text" id="withdrawName" placeholder="Your full name" />
+                    </div>
+                    <div class="form-group">
+                        <label>Email <span class="required">*</span></label>
+                        <input type="email" id="withdrawEmail" placeholder="your@email.com" />
+                    </div>
+
+                    <!-- Payment Details -->
+                    <div class="form-group">
+                        <label>Payment Method <span class="required">*</span></label>
+                        <select id="withdrawMethod">
+                            <option value="">Select</option>
+                            <option value="easypaisa">EasyPaisa</option>
+                            <option value="jazzcash">JazzCash</option>
+                            <option value="bank">Bank Transfer</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Account Number <span class="required">*</span></label>
+                        <input type="text" id="withdrawAccount" placeholder="Account number" />
+                    </div>
+
+                    <!-- Balance & Amount -->
+                    <div class="withdraw-balance">
+                        <span class="label">Available Balance</span>
+                        <div class="value" id="withdrawBalanceDisplay">0 💎</div>
+                    </div>
+                    <div class="form-group full-width">
+                        <label>Amount to Withdraw <span class="required">*</span></label>
+                        <input type="number" id="withdrawAmountInput" placeholder="Enter amount" min="1" />
+                        <small style="color:#666; font-size:0.6rem; margin-top:2px;">Max: <span id="availableDiamonds" style="color:#FFD700;">0</span> diamonds</small>
+                    </div>
+
+                    <button class="btn-withdraw" id="withdrawBtn" disabled>
+                        <i class="fas fa-hand-holding-usd"></i> Request Withdrawal
+                    </button>
+                </div>
+
+                <div class="withdraw-status" id="withdrawStatus"></div>
+
+                <!-- Withdrawal History -->
+                <div class="history-section">
+                    <h3><i class="fas fa-history"></i> Withdrawal History</h3>
+                    <div class="history-list" id="historyList">
+                        <div class="history-empty">No withdrawals yet</div>
+                    </div>
+                </div>
+
+                <div style="margin-top:10px; font-size:0.65rem; color:#555; text-align:center; border-top:1px solid rgba(255,255,255,0.03); padding-top:10px;">
+                    <i class="fas fa-clock"></i> Withdrawal requests are reviewed within 24 hours
                 </div>
             </div>
-            <div class="progress-info">
-                <div class="big-text" id="progressAdsNeeded">1 ad needed</div>
-                <div>Watch 1 ad to unlock withdrawal</div>
-            </div>
-        </div>
 
-        <!-- AD WATCH SECTION -->
-        <div class="ad-section">
-            <div class="section-header">
-                <h2><i class="fas fa-play-circle" style="margin-right:6px;"></i> Watch Ad</h2>
-                <div class="ad-counter"><i class="fas fa-gem"></i> +7 &nbsp;|&nbsp; <span id="adCounterToday">0</span>/20</div>
-            </div>
-
-            <div class="ad-display" id="adDisplay">
-                <div class="ad-placeholder" id="adPlaceholder">
-                    <i class="fas fa-hand-pointer"></i>
-                    <p style="font-size:0.95rem; color:#888;">Click <strong style="color:#FFD700;">"Watch Ad"</strong> to start earning</p>
-                    <p style="font-size:0.7rem; color:#555; margin-top:4px;">Ad opens in new tab. Stay on ad for <strong style="color:#FFD700;">10 seconds</strong> to earn!</p>
-                </div>
-                <div class="ad-timer" id="adTimer"><i class="fas fa-clock"></i> <span id="timerSeconds">10</span>s</div>
-                <div class="ad-progress" id="adProgressBar">
-                    <div class="bar" id="adProgressFill"></div>
-                </div>
-            </div>
-
-            <div class="ad-controls">
-                <button class="btn-watch" id="watchAdBtn"><i class="fas fa-external-link-alt"></i> Watch Ad</button>
-                <button class="btn-next" id="nextAdBtn" disabled><i class="fas fa-forward"></i> Next</button>
-            </div>
-
-            <div class="daily-limit-info">
-                <i class="fas fa-info-circle"></i>
-                <div class="limit-text">
-                    Daily: <span id="dailyLimitText">0</span> / 20 ads
-                    <span style="color:#666; margin:0 6px;">|</span>
-                    <span>Earn <span style="color:#FFD700;">7 💎</span> each</span>
-                </div>
-                <div class="limit-progress">
-                    <div class="bar" id="dailyProgressBar" style="width:0%;"></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- WITHDRAW SECTION -->
-        <div class="withdraw-section" id="withdrawSection">
-            <h2>💰 Withdraw Earnings</h2>
-            <p class="withdraw-sub">Minimum 01 ad required. Withdrawals processed within 24 hours.</p>
-
-            <div class="withdraw-grid">
-                <div class="form-group">
-                    <label>Full Name <span class="required">*</span></label>
-                    <input type="text" id="withdrawName" placeholder="Your full name" />
-                </div>
-                <div class="form-group">
-                    <label>Email <span class="required">*</span></label>
-                    <input type="email" id="withdrawEmail" placeholder="your@email.com" />
-                </div>
-                <div class="form-group">
-                    <label>Payment Method <span class="required">*</span></label>
-                    <select id="withdrawMethod">
-                        <option value="">Select</option>
-                        <option value="easypaisa">EasyPaisa</option>
-                        <option value="jazzcash">JazzCash</option>
-                        <option value="bank">Bank Transfer</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Account Number <span class="required">*</span></label>
-                    <input type="text" id="withdrawAccount" placeholder="Account number" />
-                </div>
-                <div class="form-group full-width">
-                    <label>Amount to Withdraw (Diamonds) <span class="required">*</span></label>
-                    <input type="number" id="withdrawAmountInput" placeholder="Enter amount" min="1" />
-                    <small style="color:#666; font-size:0.65rem; margin-top:2px;">Available: <span id="availableDiamonds" style="color:#FFD700;">0</span> diamonds</small>
-                </div>
-                <button class="btn-withdraw" id="withdrawBtn" disabled>
-                    <i class="fas fa-hand-holding-usd"></i> Request Withdrawal
-                </button>
-            </div>
-
-            <div class="withdraw-status" id="withdrawStatus"></div>
-
-            <div style="margin-top:12px; font-size:0.7rem; color:#555; text-align:center; border-top:1px solid rgba(255,255,255,0.03); padding-top:12px;">
-                <i class="fas fa-clock"></i> Withdrawal requests are reviewed within 24 hours
-            </div>
-        </div>
-
-        <!-- LEADERBOARD -->
-        <div class="leaderboard-section">
-            <h2><i class="fas fa-crown"></i> Top Earners</h2>
-            <div class="leaderboard-list" id="leaderboardList">
-                <div style="text-align:center; color:#555; padding:16px 0;">Loading top earners...</div>
-            </div>
         </div>
 
     </div>
+
+    <!-- ============================================================
+         BOTTOM NAVIGATION - FULLY WORKING
+         ============================================================ -->
+    <nav class="bottom-nav" id="bottomNav">
+        <button class="nav-item active" data-tab="home" id="navHome">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </button>
+        <button class="nav-item" data-tab="withdraw" id="navWithdraw">
+            <i class="fas fa-hand-holding-usd"></i>
+            <span>Withdraw</span>
+        </button>
+    </nav>
 
     <!-- FLOATING WHATSAPP -->
     <a href="https://wa.me/923173724356?text=Hi%20Shan!%20I%20want%20to%20know%20about%20Watch%20%26%20Earn" target="_blank" class="float-wa" aria-label="WhatsApp">
@@ -1982,6 +2298,10 @@
         const progressPercent = document.getElementById('progressPercent');
         const progressAdsNeeded = document.getElementById('progressAdsNeeded');
 
+        // Balance display
+        const balanceDisplay = document.getElementById('balanceDisplay');
+        const adsDisplay = document.getElementById('adsDisplay');
+
         // Withdraw
         const withdrawName = document.getElementById('withdrawName');
         const withdrawEmail = document.getElementById('withdrawEmail');
@@ -1989,8 +2309,10 @@
         const withdrawAccount = document.getElementById('withdrawAccount');
         const withdrawAmountInput = document.getElementById('withdrawAmountInput');
         const availableDiamonds = document.getElementById('availableDiamonds');
+        const withdrawBalanceDisplay = document.getElementById('withdrawBalanceDisplay');
         const withdrawBtn = document.getElementById('withdrawBtn');
         const withdrawStatus = document.getElementById('withdrawStatus');
+        const historyList = document.getElementById('historyList');
 
         // Leaderboard
         const leaderboardList = document.getElementById('leaderboardList');
@@ -2004,7 +2326,9 @@
         let secondsLeft = 0;
         let timerPaused = false;
         let adCompleted = false;
-        let adStartTime = null;
+        let elapsedTime = 0;
+        let currentAdLink = '';
+        let isPaused = false;
         const AD_WATCH_TIME = 10;
         const DIAMONDS_PER_AD = 7;
         const DAILY_AD_LIMIT = 20;
@@ -2015,6 +2339,47 @@
         let userDocRef = null;
         let todayDate = '';
         let adWindow = null;
+        let currentTab = 'home';
+
+        // ============================================================
+        // BOTTOM NAVIGATION - TAB SWITCHING
+        // ============================================================
+        const navHome = document.getElementById('navHome');
+        const navWithdraw = document.getElementById('navWithdraw');
+        const tabHome = document.getElementById('tab-home');
+        const tabWithdraw = document.getElementById('tab-withdraw');
+
+        function switchTab(tab) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+
+            // Show selected tab
+            if (tab === 'home') {
+                tabHome.classList.add('active');
+                navHome.classList.add('active');
+                navWithdraw.classList.remove('active');
+                currentTab = 'home';
+            } else if (tab === 'withdraw') {
+                tabWithdraw.classList.add('active');
+                navWithdraw.classList.add('active');
+                navHome.classList.remove('active');
+                currentTab = 'withdraw';
+                // Refresh withdraw data when switching
+                if (currentUser) {
+                    updateWithdrawStatus();
+                    updateHistory();
+                    updateUI();
+                }
+            }
+        }
+
+        navHome.addEventListener('click', function() {
+            switchTab('home');
+        });
+
+        navWithdraw.addEventListener('click', function() {
+            switchTab('withdraw');
+        });
 
         // ============================================================
         // LOADING SCREEN
@@ -2024,7 +2389,7 @@
         }, 2000);
 
         // ============================================================
-        // VPN BLOCK - FIXED ✅
+        // VPN BLOCK
         // ============================================================
         function checkVPNStatus() {
             fetch('https://api.ipify.org?format=json')
@@ -2034,25 +2399,13 @@
                 })
                 .then(response => response.json())
                 .then(data => {
-                    // Check if VPN/proxy detected
                     if (data.proxy === true || data.vpn === true || data.hosting === true) {
-                        showVPNBlock();
+                        document.getElementById('vpnBlockOverlay').classList.add('active');
                     }
                 })
                 .catch(() => {
-                    // If API fails, allow access (fallback)
                     console.log('VPN check failed, allowing access');
                 });
-        }
-
-        function showVPNBlock() {
-            document.getElementById('vpnBlockOverlay').classList.add('active');
-            if (currentUser) {
-                db.collection('users').doc(currentUser.uid).update({
-                    vpnDetected: true,
-                    vpnDetectedAt: new Date().toISOString()
-                }).catch(() => {});
-            }
         }
 
         // ============================================================
@@ -2126,7 +2479,7 @@
                             <button class="active" data-tab="signin">Sign In</button>
                             <button data-tab="signup">Create Account</button>
                         </div>
-                        <div class="tab-content active" id="tab-signin">
+                        <div class="tab-content-login active" id="tab-signin">
                             <div class="form-group">
                                 <label>Email</label>
                                 <input type="email" id="loginEmail" placeholder="your@email.com" />
@@ -2144,7 +2497,7 @@
                             </button>
                             <div class="error-msg" id="loginError">Invalid credentials.</div>
                         </div>
-                        <div class="tab-content" id="tab-signup">
+                        <div class="tab-content-login" id="tab-signup">
                             <div class="form-group">
                                 <label>Full Name</label>
                                 <input type="text" id="signupName" placeholder="Your full name" />
@@ -2186,7 +2539,8 @@
                     tabs.forEach(t => t.classList.remove('active'));
                     this.classList.add('active');
                     const tabName = this.dataset.tab;
-                    overlayDiv.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
+                    overlayDiv.querySelectorAll('.tab-content-login').forEach(tc => tc.classList.remove(
+                    'active'));
                     const targetTab = overlayDiv.querySelector(`#tab-${tabName}`);
                     if (targetTab) targetTab.classList.add('active');
                     overlayDiv.querySelectorAll('.error-msg').forEach(el => el.style.display = 'none');
@@ -2294,7 +2648,7 @@
             document.querySelectorAll('.login-box input').forEach(input => {
                 input.addEventListener('keypress', function(e) {
                     if (e.key === 'Enter') {
-                        const activeTab = document.querySelector('.tab-content.active');
+                        const activeTab = document.querySelector('.tab-content-login.active');
                         const btn = activeTab.querySelector('.email-btn');
                         if (btn) btn.click();
                     }
@@ -2339,11 +2693,15 @@
                 updateProgressRing(0);
                 withdrawBtn.disabled = true;
                 availableDiamonds.textContent = '0';
+                withdrawBalanceDisplay.textContent = '0 💎';
+                balanceDisplay.textContent = '0';
+                adsDisplay.textContent = '0';
                 rankDisplayEl.textContent = '-';
                 leaderboardList.innerHTML =
-                    '<div style="text-align:center; color:#555; padding:16px 0;">Sign in to see leaderboard</div>';
+                    '<div style="text-align:center; color:#555; padding:12px 0; font-size:0.8rem;">Sign in to see leaderboard</div>';
                 watchAdBtn.disabled = true;
                 watchAdBtn.title = 'Sign in to watch ads';
+                historyList.innerHTML = '<div class="history-empty">Sign in to see history</div>';
             }
         });
 
@@ -2369,12 +2727,20 @@
                         dailyAds: {},
                         withdrawals: [],
                         rank: 0,
-                        rejectedWithdrawals: []
+                        rejectedWithdrawals: [],
+                        accountName: '',
+                        accountEmail: user.email || '',
+                        accountMethod: '',
+                        accountNumber: ''
                     };
                     await userDocRef.set(newUserData);
                     userData = newUserData;
                 } else {
                     userData = doc.data();
+                    if (!userData.accountName) userData.accountName = '';
+                    if (!userData.accountEmail) userData.accountEmail = user.email || '';
+                    if (!userData.accountMethod) userData.accountMethod = '';
+                    if (!userData.accountNumber) userData.accountNumber = '';
                     await checkRejectedWithdrawals();
                 }
 
@@ -2390,9 +2756,16 @@
                     });
                 }
 
+                // Load account info
+                withdrawName.value = userData.accountName || '';
+                withdrawEmail.value = userData.accountEmail || '';
+                withdrawMethod.value = userData.accountMethod || '';
+                withdrawAccount.value = userData.accountNumber || '';
+
                 updateUI();
                 loadLeaderboard();
                 updateWithdrawStatus();
+                updateHistory();
 
             } catch (error) {
                 console.error('Error initializing user data:', error);
@@ -2401,7 +2774,7 @@
         }
 
         // ============================================================
-        // CHECK REJECTED WITHDRAWALS - Task 3
+        // CHECK REJECTED WITHDRAWALS
         // ============================================================
         async function checkRejectedWithdrawals() {
             if (!userData || !userData.withdrawals) return;
@@ -2435,37 +2808,51 @@
             const totalDiamonds = userData.totalDiamonds || 0;
             const totalAds = userData.totalAdsWatched || 0;
 
+            // Stats
             totalDiamondsEl.textContent = totalDiamonds;
             totalAdsWatchedEl.textContent = totalAds;
             todayAdsEl.textContent = dailyCount;
             todayLimitEl.textContent = `${dailyCount} / ${DAILY_AD_LIMIT}`;
+
+            // Ad section
             adCounterToday.textContent = dailyCount;
             dailyLimitText.textContent = dailyCount;
             dailyProgressBar.style.width = `${Math.min((dailyCount / DAILY_AD_LIMIT) * 100, 100)}%`;
+            balanceDisplay.textContent = totalDiamonds;
+            adsDisplay.textContent = totalAds;
 
+            // Progress ring
             const progress = Math.min(totalAds / ADS_NEEDED_FOR_WITHDRAW, 1);
             updateProgressRing(progress);
 
+            // Rank
             if (userData.rank) {
                 rankDisplayEl.textContent = `#${userData.rank}`;
             } else {
                 rankDisplayEl.textContent = '-';
             }
 
+            // Withdraw section
             const canWithdraw = totalAds >= ADS_NEEDED_FOR_WITHDRAW && totalDiamonds > 0;
             withdrawBtn.disabled = !canWithdraw;
             availableDiamonds.textContent = totalDiamonds;
+            withdrawBalanceDisplay.textContent = `${totalDiamonds} 💎`;
 
             withdrawAmountInput.max = totalDiamonds;
             withdrawAmountInput.placeholder = `Max ${totalDiamonds}`;
             validateWithdrawAmount();
 
-            const canWatch = dailyCount < DAILY_AD_LIMIT && !isWatching && !isRedirecting;
-            watchAdBtn.disabled = !canWatch;
+            // Watch button
+            const canWatch = dailyCount < DAILY_AD_LIMIT && !isWatching && !isRedirecting && !isPaused;
+            if (!isPaused) {
+                watchAdBtn.disabled = !canWatch;
+            }
             if (dailyCount >= DAILY_AD_LIMIT) {
                 watchAdBtn.title = 'Daily limit reached (20 ads)';
             } else if (isWatching || isRedirecting) {
                 watchAdBtn.title = 'Please wait for current ad to complete';
+            } else if (isPaused) {
+                watchAdBtn.title = 'Click to continue watching';
             } else {
                 watchAdBtn.title = 'Click to watch ad and earn 7 diamonds';
             }
@@ -2478,7 +2865,7 @@
         }
 
         // ============================================================
-        // VALIDATE WITHDRAW AMOUNT - Task 2
+        // VALIDATE WITHDRAW AMOUNT
         // ============================================================
         function validateWithdrawAmount() {
             const totalDiamonds = userData?.totalDiamonds || 0;
@@ -2498,6 +2885,9 @@
 
         withdrawAmountInput.addEventListener('input', validateWithdrawAmount);
 
+        // ============================================================
+        // PROGRESS RING
+        // ============================================================
         function updateProgressRing(progress) {
             const circumference = 314.159;
             const offset = circumference - (progress * circumference);
@@ -2505,6 +2895,9 @@
             progressPercent.textContent = `${Math.round(progress * 100)}%`;
         }
 
+        // ============================================================
+        // UPDATE WITHDRAW STATUS
+        // ============================================================
         function updateWithdrawStatus() {
             if (!userData || !userData.withdrawals || userData.withdrawals.length === 0) {
                 withdrawStatus.className = 'withdraw-status';
@@ -2542,11 +2935,50 @@
         }
 
         // ============================================================
-        // WATCH AD - 10 SECOND RULE (FIXED ✅)
+        // UPDATE HISTORY
+        // ============================================================
+        function updateHistory() {
+            if (!userData || !userData.withdrawals || userData.withdrawals.length === 0) {
+                historyList.innerHTML = '<div class="history-empty">No withdrawals yet</div>';
+                return;
+            }
+
+            const sorted = [...userData.withdrawals].sort((a, b) => {
+                const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+                const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+                return dateB - dateA;
+            }).slice(0, 10);
+
+            let html = '';
+            sorted.forEach(w => {
+                const status = w.status || 'pending';
+                const statusText = status.charAt(0).toUpperCase() + status.slice(1);
+                const date = w.createdAt ? new Date(w.createdAt).toLocaleDateString() : 'Recently';
+                const amount = w.amount || 0;
+
+                html += `
+                        <div class="history-item">
+                            <span class="h-amount">${amount} 💎</span>
+                            <span class="h-status ${status}">${statusText}</span>
+                            <span class="h-date">${date}</span>
+                        </div>
+                    `;
+            });
+
+            historyList.innerHTML = html;
+        }
+
+        // ============================================================
+        // WATCH AD - WITH CONTINUE/RESUME SUPPORT
         // ============================================================
         watchAdBtn.addEventListener('click', function() {
             if (!currentUser) {
                 showLoginPopup();
+                return;
+            }
+
+            if (isPaused && currentAdLink) {
+                resumeWatchingAd();
                 return;
             }
 
@@ -2568,10 +3000,11 @@
             isRedirecting = true;
             isWatching = false;
             adCompleted = false;
+            isPaused = false;
+            elapsedTime = 0;
             timerPaused = false;
-            adStartTime = Date.now();
 
-            const adLink = getRandomAdLink();
+            currentAdLink = getRandomAdLink();
 
             adDisplay.classList.add('watching');
             adTimer.classList.add('show');
@@ -2581,20 +3014,21 @@
             watchAdBtn.textContent = '🔗 Redirecting...';
             watchAdBtn.disabled = true;
             watchAdBtn.classList.add('redirecting');
+            watchAdBtn.classList.remove('continue-btn');
 
             adPlaceholder.innerHTML = `
-                    <i class="fas fa-external-link-alt" style="color:#FFD700; font-size:2.5rem;"></i>
-                    <p style="font-size:1rem; color:#FFD700; margin-top:8px;">Opening ad in new tab...</p>
-                    <p style="font-size:0.8rem; color:#555;">Stay on the ad page for <strong style="color:#FFD700;">${AD_WATCH_TIME}</strong> seconds</p>
-                    <p style="font-size:0.7rem; color:#ff4444; margin-top:4px;">
-                        <i class="fas fa-exclamation-triangle"></i> If you return early, you won't earn!
+                    <i class="fas fa-external-link-alt" style="color:#FFD700; font-size:2rem;"></i>
+                    <p style="font-size:0.9rem; color:#FFD700; margin-top:6px;">Opening ad in new tab...</p>
+                    <p style="font-size:0.7rem; color:#555;">Stay on the ad page for <strong style="color:#FFD700;">${AD_WATCH_TIME}</strong> seconds</p>
+                    <p style="font-size:0.6rem; color:#ff4444; margin-top:3px;">
+                        <i class="fas fa-exclamation-triangle"></i> If you return early, click "Continue Watching"
                     </p>
                 `;
 
-            adWindow = window.open(adLink, '_blank');
+            adWindow = window.open(currentAdLink, '_blank');
 
             if (!adWindow || adWindow.closed || typeof adWindow.closed == 'undefined') {
-                window.location.href = adLink;
+                window.location.href = currentAdLink;
                 startTimer();
             } else {
                 startTimer();
@@ -2605,46 +3039,48 @@
 
         function startTimer() {
             let elapsed = 0;
+            if (elapsedTime > 0) {
+                elapsed = elapsedTime;
+            }
             timerPaused = false;
 
-            updatePlaceholderTimer(secondsLeft);
+            updatePlaceholderTimer(AD_WATCH_TIME - elapsed);
 
             watchTimer = setInterval(() => {
-                // ✅ Check if user is on our page
-                if (document.hasFocus() && elapsed < AD_WATCH_TIME && !timerPaused) {
-                    // User came back to our page before 10 seconds
+                if (document.hasFocus() && elapsed < AD_WATCH_TIME && !timerPaused && !isPaused) {
                     timerPaused = true;
+                    isPaused = true;
+                    elapsedTime = elapsed;
                     clearInterval(watchTimer);
 
-                    showCustomPopup('warning', '⏳ You Came Back Early!',
-                        `You need to spend the full ${AD_WATCH_TIME} seconds on the ad page.\n\nPlease go back to the ad tab and stay there!\n\n⏱️ Timer will restart.`,
-                        'OK', function() {
-                            timerPaused = false;
-                            elapsed = 0;
-                            secondsLeft = AD_WATCH_TIME;
-                            timerSecondsEl.textContent = secondsLeft;
-                            adProgressFill.style.width = '0%';
-                            updatePlaceholderTimer(secondsLeft);
+                    watchAdBtn.textContent = '⏳ Continue Watching';
+                    watchAdBtn.disabled = false;
+                    watchAdBtn.classList.remove('redirecting');
+                    watchAdBtn.classList.add('continue-btn');
+                    watchAdBtn.title = 'Click to continue watching the ad';
 
-                            // Check if user actually went back
-                            setTimeout(() => {
-                                if (document.hasFocus()) {
-                                    // User is still here - show warning again
-                                    showCustomPopup('warning', '⚠️ Go Back to Ad!',
-                                        'You must stay on the ad page for 10 seconds to earn diamonds!',
-                                        'OK');
-                                } else {
-                                    // User went back - restart timer
-                                    startTimer();
-                                }
-                            }, 2000);
-                        });
+                    adPlaceholder.innerHTML = `
+                            <i class="fas fa-pause-circle" style="color:#FFD700; font-size:2rem;"></i>
+                            <p style="font-size:0.9rem; color:#FFD700; margin-top:6px;">⏸️ Ad Paused</p>
+                            <p style="font-size:0.7rem; color:#888;">
+                                ${Math.round(AD_WATCH_TIME - elapsed)} seconds remaining
+                            </p>
+                            <p style="font-size:0.7rem; color:#FFD700; margin-top:4px;">
+                                <i class="fas fa-hand-pointer"></i> Click "Continue Watching" to resume
+                            </p>
+                        `;
+
+                    showCustomPopup('info', '⏸️ Ad Paused',
+                        `You came back early. ${Math.round(AD_WATCH_TIME - elapsed)} seconds remaining.\n\nClick "Continue Watching" to resume the ad.`,
+                        'OK');
+
+                    updateUI();
                     return;
                 }
 
-                // Only increment if not paused and user is not on our page
-                if (!timerPaused && !document.hasFocus()) {
+                if (!timerPaused && !isPaused) {
                     elapsed += 0.5;
+                    elapsedTime = elapsed;
                     const progress = Math.min(elapsed / AD_WATCH_TIME, 1);
                     adProgressFill.style.width = `${progress * 100}%`;
 
@@ -2656,41 +3092,84 @@
                 if (elapsed >= AD_WATCH_TIME) {
                     clearInterval(watchTimer);
                     adCompleted = true;
+                    isPaused = false;
+                    elapsedTime = 0;
                     completeAdWatch();
                 }
             }, 500);
         }
 
+        function resumeWatchingAd() {
+            if (!currentAdLink) {
+                isPaused = false;
+                return;
+            }
+
+            isPaused = false;
+            isRedirecting = true;
+            timerPaused = false;
+
+            adWindow = window.open(currentAdLink, '_blank');
+
+            if (!adWindow || adWindow.closed || typeof adWindow.closed == 'undefined') {
+                window.location.href = currentAdLink;
+            }
+
+            watchAdBtn.textContent = '🔗 Redirecting...';
+            watchAdBtn.disabled = true;
+            watchAdBtn.classList.remove('continue-btn');
+            watchAdBtn.classList.add('redirecting');
+
+            adPlaceholder.innerHTML = `
+                    <i class="fas fa-external-link-alt" style="color:#FFD700; font-size:2rem;"></i>
+                    <p style="font-size:0.9rem; color:#FFD700; margin-top:6px;">Reopening ad...</p>
+                    <p style="font-size:0.7rem; color:#888;">
+                        ${Math.round(AD_WATCH_TIME - elapsedTime)} seconds remaining
+                    </p>
+                `;
+
+            startTimer();
+            nextAdBtn.disabled = true;
+        }
+
         document.addEventListener('visibilitychange', function() {
-            if (!document.hidden && isRedirecting && !adCompleted && !timerPaused) {
-                // User came back to our page
+            if (!document.hidden && isRedirecting && !adCompleted && !timerPaused && !isPaused) {
                 timerPaused = true;
+                isPaused = true;
+                elapsedTime = elapsedTime || 0;
                 clearInterval(watchTimer);
 
-                showCustomPopup('warning', '⏳ You Left the Ad!',
-                    `You must stay on the ad page for ${AD_WATCH_TIME} seconds to earn diamonds.\n\nPlease go back to the ad tab now!`,
-                    'OK', function() {
-                        if (document.hidden) {
-                            timerPaused = false;
-                            startTimer();
-                        } else {
-                            showCustomPopup('warning', '⚠️ Go Back!',
-                                'You must stay on the ad page to earn diamonds!', 'OK');
-                        }
-                    });
+                watchAdBtn.textContent = '⏳ Continue Watching';
+                watchAdBtn.disabled = false;
+                watchAdBtn.classList.remove('redirecting');
+                watchAdBtn.classList.add('continue-btn');
+                watchAdBtn.title = 'Click to continue watching the ad';
+
+                adPlaceholder.innerHTML = `
+                        <i class="fas fa-pause-circle" style="color:#FFD700; font-size:2rem;"></i>
+                        <p style="font-size:0.9rem; color:#FFD700; margin-top:6px;">⏸️ Ad Paused</p>
+                        <p style="font-size:0.7rem; color:#888;">
+                            ${Math.round(AD_WATCH_TIME - elapsedTime)} seconds remaining
+                        </p>
+                        <p style="font-size:0.7rem; color:#FFD700; margin-top:4px;">
+                            <i class="fas fa-hand-pointer"></i> Click "Continue Watching" to resume
+                        </p>
+                    `;
+
+                updateUI();
             }
         });
 
         function updatePlaceholderTimer(seconds) {
             adPlaceholder.innerHTML = `
-                    <i class="fas fa-hourglass-half" style="color:#FFD700; font-size:2.5rem;"></i>
-                    <p style="font-size:1.2rem; color:#FFD700; margin-top:8px;">
-                        ⏳ ${seconds}s remaining
+                    <i class="fas fa-hourglass-half" style="color:#FFD700; font-size:2rem;"></i>
+                    <p style="font-size:1rem; color:#FFD700; margin-top:6px;">
+                        ⏳ ${Math.round(seconds)}s remaining
                     </p>
-                    <p style="font-size:0.8rem; color:#555;">
+                    <p style="font-size:0.7rem; color:#555;">
                         Please stay on the ad page for the full time
                     </p>
-                    <p style="font-size:0.7rem; color:#ff4444; margin-top:4px;">
+                    <p style="font-size:0.6rem; color:#ff4444; margin-top:3px;">
                         <i class="fas fa-exclamation-triangle"></i> Don't close or leave the ad tab!
                     </p>
                 `;
@@ -2699,6 +3178,8 @@
         async function completeAdWatch() {
             isRedirecting = false;
             isWatching = false;
+            isPaused = false;
+            elapsedTime = 0;
             clearInterval(watchTimer);
 
             if (adWindow && !adWindow.closed) {
@@ -2711,11 +3192,12 @@
 
             watchAdBtn.textContent = '✅ Ad Completed!';
             watchAdBtn.classList.remove('redirecting');
+            watchAdBtn.classList.remove('continue-btn');
 
             adPlaceholder.innerHTML = `
-                    <i class="fas fa-check-circle" style="color:#4CAF50; font-size:3rem;"></i>
-                    <p style="font-size:1.1rem; color:#4CAF50; margin-top:8px;">Ad Watched Successfully! 🎉</p>
-                    <p style="font-size:0.8rem; color:#888;">+7 diamonds added to your account</p>
+                    <i class="fas fa-check-circle" style="color:#4CAF50; font-size:2.5rem;"></i>
+                    <p style="font-size:1rem; color:#4CAF50; margin-top:6px;">Ad Watched Successfully! 🎉</p>
+                    <p style="font-size:0.7rem; color:#888;">+7 diamonds added to your account</p>
                 `;
 
             nextAdBtn.disabled = false;
@@ -2740,14 +3222,16 @@
         function resetAdUI() {
             adPlaceholder.innerHTML = `
                     <i class="fas fa-hand-pointer"></i>
-                    <p style="font-size:0.95rem; color:#888;">Click <strong style="color:#FFD700;">"Watch Ad"</strong> to start earning</p>
-                    <p style="font-size:0.7rem; color:#555; margin-top:4px;">Ad opens in new tab. Stay on ad for <strong style="color:#FFD700;">10 seconds</strong> to earn!</p>
+                    <p style="font-size:0.85rem; color:#888;">Click <strong style="color:#FFD700;">"Watch Ad"</strong> to start earning</p>
+                    <p style="font-size:0.65rem; color:#555; margin-top:3px;">Ad opens in new tab. Stay on ad for <strong style="color:#FFD700;">10 seconds</strong> to earn!</p>
                 `;
             watchAdBtn.innerHTML = '<i class="fas fa-external-link-alt"></i> Watch Ad';
             watchAdBtn.classList.remove('redirecting');
+            watchAdBtn.classList.remove('continue-btn');
             adProgressFill.style.width = '0%';
             nextAdBtn.disabled = true;
-            timerPaused = false;
+            isPaused = false;
+            elapsedTime = 0;
             updateUI();
         }
 
@@ -2794,11 +3278,49 @@
         // NEXT AD BUTTON
         // ============================================================
         nextAdBtn.addEventListener('click', function() {
-            if (isWatching || isRedirecting) return;
+            if (isWatching || isRedirecting || isPaused) return;
             if (this.disabled) return;
 
             resetAdUI();
             updateUI();
+        });
+
+        // ============================================================
+        // SAVE ACCOUNT INFO
+        // ============================================================
+        async function saveAccountInfo() {
+            if (!currentUser || !userDocRef) return;
+
+            const name = withdrawName.value.trim();
+            const email = withdrawEmail.value.trim();
+            const method = withdrawMethod.value;
+            const account = withdrawAccount.value.trim();
+
+            if (name || email || method || account) {
+                try {
+                    await userDocRef.update({
+                        accountName: name,
+                        accountEmail: email,
+                        accountMethod: method,
+                        accountNumber: account
+                    });
+                    if (userData) {
+                        userData.accountName = name;
+                        userData.accountEmail = email;
+                        userData.accountMethod = method;
+                        userData.accountNumber = account;
+                    }
+                } catch (error) {
+                    console.error('Error saving account info:', error);
+                }
+            }
+        }
+
+        ['input', 'change'].forEach(event => {
+            withdrawName.addEventListener(event, saveAccountInfo);
+            withdrawEmail.addEventListener(event, saveAccountInfo);
+            withdrawMethod.addEventListener(event, saveAccountInfo);
+            withdrawAccount.addEventListener(event, saveAccountInfo);
         });
 
         // ============================================================
@@ -2890,6 +3412,7 @@
 
                 updateUI();
                 updateWithdrawStatus();
+                updateHistory();
 
                 this.disabled = false;
                 this.innerHTML = '<i class="fas fa-hand-holding-usd"></i> Request Withdrawal';
@@ -2898,10 +3421,6 @@
                     `Your withdrawal request of ${amount} diamonds has been submitted.\nYou will receive payment within 24 hours.`,
                     'OK');
 
-                withdrawName.value = '';
-                withdrawEmail.value = '';
-                withdrawMethod.value = '';
-                withdrawAccount.value = '';
                 withdrawAmountInput.value = '';
 
             } catch (error) {
@@ -2924,7 +3443,7 @@
 
                 if (snapshot.empty) {
                     leaderboardList.innerHTML =
-                        '<div style="text-align:center; color:#555; padding:16px 0;">No users yet. Be the first!</div>';
+                        '<div style="text-align:center; color:#555; padding:12px 0; font-size:0.8rem;">No users yet. Be the first!</div>';
                     return;
                 }
 
@@ -2964,7 +3483,7 @@
             } catch (error) {
                 console.error('Leaderboard error:', error);
                 leaderboardList.innerHTML =
-                    '<div style="text-align:center; color:#555; padding:16px 0;">Failed to load leaderboard</div>';
+                    '<div style="text-align:center; color:#555; padding:12px 0; font-size:0.8rem;">Failed to load leaderboard</div>';
             }
         }
 
@@ -2992,7 +3511,8 @@
 
         console.log('Watch & Earn page loaded successfully!');
         console.log('Admin email: learnwithhusnain0@gmail.com');
-        console.log('Ad watch time: 10 seconds (MUST stay on ad page)');
+        console.log('✅ Bottom Navigation: Home | Withdraw');
+        console.log('Ad watch time: 10 seconds (with resume support)');
         console.log('Withdraw enabled after: 1 ad');
     </script>
 
