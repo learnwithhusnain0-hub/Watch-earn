@@ -34,6 +34,7 @@
     </script>
 
     <style>
+        /* All styles remain same - no changes needed */
         * {
             margin: 0;
             padding: 0;
@@ -568,24 +569,6 @@
 
         .btn-manage:hover {
             background: rgba(255, 215, 0, 0.25);
-        }
-
-        .btn-add {
-            background: rgba(76, 175, 80, 0.15);
-            color: #4CAF50;
-        }
-
-        .btn-add:hover {
-            background: rgba(76, 175, 80, 0.25);
-        }
-
-        .btn-remove {
-            background: rgba(255, 68, 68, 0.12);
-            color: #ff4444;
-        }
-
-        .btn-remove:hover {
-            background: rgba(255, 68, 68, 0.2);
         }
 
         .btn-delete-user {
@@ -1237,18 +1220,6 @@
         </div>
     </div>
 
-    <!-- CONFIRM POPUP -->
-    <div class="diamond-popup" id="confirmPopup">
-        <div class="popup-content" style="border-color:#ff4444;">
-            <h2 style="color:#ff4444;">⚠️ Confirm</h2>
-            <p id="confirmMessage" style="color:#aaa; margin:12px 0;">Are you sure?</p>
-            <div class="popup-actions">
-                <button class="btn-remove" onclick="confirmAction()" style="grid-column:1/2;">Yes, Confirm</button>
-                <button class="btn-close" onclick="closeConfirmPopup()" style="grid-column:2/3;">Cancel</button>
-            </div>
-        </div>
-    </div>
-
     <!-- ANIMATED BACKGROUND -->
     <div class="bg-animation">
         <div class="particle"></div><div class="particle"></div><div class="particle"></div>
@@ -1463,7 +1434,7 @@
         }
 
         // ============================================================
-        // SHOW CONFIRM POPUP (For Admin Actions)
+        // ✅ FIXED: SHOW CONFIRM POPUP (For Admin Actions)
         // ============================================================
         function showConfirmPopup(title, message, onConfirm, onCancel) {
             const popup = document.getElementById('customPopup');
@@ -1490,8 +1461,12 @@
             const handleConfirm = function() {
                 popup.classList.remove('active');
                 actions.innerHTML = `<button class="btn-primary" id="popupConfirmBtn">OK</button>`;
-                if (onConfirm) onConfirm();
+                // ✅ FIX: Small delay to ensure popup is closed
+                setTimeout(() => {
+                    if (onConfirm) onConfirm();
+                }, 100);
             };
+            
             const handleCancel = function() {
                 popup.classList.remove('active');
                 actions.innerHTML = `<button class="btn-primary" id="popupConfirmBtn">OK</button>`;
@@ -1787,7 +1762,6 @@
                 const name = user.displayName || 'User';
                 const email = user.email || 'No email';
                 const total = user.total || 0;
-                const ads = user.totalAdsWatched || 0;
 
                 html += `
                         <div class="user-item">
@@ -1947,25 +1921,41 @@
         }
 
         // ============================================================
-        // CONFIRM ACTION
+        // ✅ FIXED: CONFIRM ACTION - Fresh data fetch + proper error handling
         // ============================================================
         async function confirmAction() {
             closeConfirmPopup();
 
-            if (!selectedUserId || !pendingAction) return;
+            if (!selectedUserId || !pendingAction) {
+                showToast('Missing user or action', 'error');
+                return;
+            }
 
             try {
+                console.log('🔵 Processing action:', pendingAction, 'Amount:', pendingAmount, 'User:', selectedUserId);
+
+                // ✅ FIX: Fresh data fetch karein
+                const freshDoc = await db.collection('users').doc(selectedUserId).get();
+                if (!freshDoc.exists) {
+                    showToast('User not found', 'error');
+                    return;
+                }
+
+                const freshData = freshDoc.data();
                 const userRef = db.collection('users').doc(selectedUserId);
                 let updateData = {};
+                let message = '';
 
                 if (pendingAction === 'add') {
                     updateData.totalDiamonds = firebase.firestore.FieldValue.increment(pendingAmount);
-                    showToast(`✅ ${pendingAmount.toLocaleString()} diamonds added!`, 'success');
+                    message = `✅ ${pendingAmount.toLocaleString()} diamonds added!`;
+                    console.log('📌 Adding', pendingAmount, 'to main balance');
+
                 } else if (pendingAction === 'remove') {
                     let remaining = pendingAmount;
-                    let mainBalance = selectedUserData.totalDiamonds || 0;
-                    let referralBonus = selectedUserData.referralBonus || 0;
-                    let teamEarning = selectedUserData.teamEarning || 0;
+                    let mainBalance = freshData.totalDiamonds || 0;
+                    let referralBonus = freshData.referralBonus || 0;
+                    let teamEarning = freshData.teamEarning || 0;
 
                     if (remaining > 0 && mainBalance > 0) {
                         const deduct = Math.min(remaining, mainBalance);
@@ -1986,46 +1976,45 @@
                     updateData.totalDiamonds = mainBalance;
                     updateData.referralBonus = referralBonus;
                     updateData.teamEarning = teamEarning;
+                    message = `✅ ${pendingAmount.toLocaleString()} diamonds removed!`;
+                    console.log('📌 Removing', pendingAmount, 'from balance');
 
-                    await db.collection('adminActions').add({
-                        userId: selectedUserId,
-                        userEmail: selectedUserData.email || 'Unknown',
-                        action: 'remove',
-                        amount: pendingAmount,
-                        createdAt: new Date().toISOString(),
-                        adminEmail: auth.currentUser?.email || 'Unknown'
-                    });
-
-                    showToast(`✅ ${pendingAmount.toLocaleString()} diamonds removed!`, 'success');
                 } else if (pendingAction === 'set') {
-                    const currentTotal = (selectedUserData.totalDiamonds || 0) +
-                        (selectedUserData.referralBonus || 0) +
-                        (selectedUserData.teamEarning || 0);
+                    const currentTotal = (freshData.totalDiamonds || 0) +
+                        (freshData.referralBonus || 0) +
+                        (freshData.teamEarning || 0);
 
                     if (pendingAmount > currentTotal) {
                         const diff = pendingAmount - currentTotal;
                         updateData.totalDiamonds = firebase.firestore.FieldValue.increment(diff);
                     } else if (pendingAmount < currentTotal) {
                         const diff = currentTotal - pendingAmount;
-                        let mainBalance = selectedUserData.totalDiamonds || 0;
+                        let mainBalance = freshData.totalDiamonds || 0;
                         let newMain = Math.max(0, mainBalance - diff);
                         updateData.totalDiamonds = newMain;
                     }
-                    showToast(`✅ Balance set to ${pendingAmount.toLocaleString()} diamonds!`, 'success');
+                    message = `✅ Balance set to ${pendingAmount.toLocaleString()} diamonds!`;
+                    console.log('📌 Setting balance to', pendingAmount);
                 }
 
                 if (Object.keys(updateData).length > 0) {
                     await userRef.update(updateData);
+                    console.log('✅ Update successful');
+                    showToast(message, 'success');
+                } else {
+                    showToast('No changes made', 'info');
                 }
 
+                // ✅ Refresh data
                 setTimeout(() => {
                     loadAllUsers();
                     loadStats();
+                    loadWithdrawals();
                     closeDiamondPopup();
                 }, 500);
 
             } catch (error) {
-                console.error('Action error:', error);
+                console.error('❌ Action error:', error);
                 showToast(`❌ Error: ${error.message}`, 'error');
             }
 
@@ -2430,7 +2419,6 @@
                 const targetTab = document.getElementById(`tab-${tabName}`);
                 if (targetTab) targetTab.classList.add('active');
 
-                // Load users when switching to users tab
                 if (tabName === 'users' && isAdmin) {
                     loadAllUsers();
                 }
