@@ -326,6 +326,74 @@
             }
         }
 
+        /* ---------- WITHDRAW TICKER (MARQUEE) ---------- */
+        .withdraw-ticker {
+            background: rgba(255, 215, 0, 0.05);
+            border-top: 1px solid rgba(255, 215, 0, 0.1);
+            border-bottom: 1px solid rgba(255, 215, 0, 0.1);
+            padding: 6px 0;
+            overflow: hidden;
+            position: relative;
+            margin-bottom: 10px;
+            border-radius: 8px;
+        }
+
+        .ticker-wrap {
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .ticker-content {
+            display: inline-block;
+            animation: scrollTicker 30s linear infinite;
+        }
+
+        .ticker-item {
+            display: inline-block;
+            margin: 0 25px;
+            color: #FFD700;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .ticker-item .name {
+            color: #fff;
+        }
+
+        .ticker-item .amount {
+            color: #FFD700;
+        }
+
+        .ticker-item .currency {
+            color: #888;
+            font-size: 0.65rem;
+        }
+
+        .ticker-item .trophy {
+            color: #FFD700;
+            margin-right: 4px;
+        }
+
+        @keyframes scrollTicker {
+            0% {
+                transform: translateX(100%);
+            }
+            100% {
+                transform: translateX(-100%);
+            }
+        }
+
+        .ticker-wrap:hover .ticker-content {
+            animation-play-state: paused;
+        }
+
+        @media (max-width: 400px) {
+            .ticker-item {
+                font-size: 0.65rem;
+                margin: 0 15px;
+            }
+        }
+
         /* ---------- WATCH & EARN HERO ---------- */
         .watch-hero {
             text-align: center;
@@ -418,104 +486,6 @@
             margin-top: 2px;
         }
 
-        /* ---------- PROGRESS RING ---------- */
-        .progress-ring-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 12px;
-            margin: 10px 0 14px;
-            flex-wrap: wrap;
-        }
-
-        .progress-ring {
-            position: relative;
-            width: 80px;
-            height: 80px;
-            flex-shrink: 0;
-        }
-
-        @media (min-width: 500px) {
-            .progress-ring {
-                width: 100px;
-                height: 100px;
-            }
-        }
-
-        .progress-ring svg {
-            transform: rotate(-90deg);
-            width: 100%;
-            height: 100%;
-        }
-
-        .progress-ring .circle-bg {
-            fill: none;
-            stroke: rgba(255, 255, 255, 0.05);
-            stroke-width: 8;
-        }
-
-        .progress-ring .circle-progress {
-            fill: none;
-            stroke: #FFD700;
-            stroke-width: 8;
-            stroke-linecap: round;
-            transition: stroke-dashoffset 0.8s cubic-bezier(0.22, 1, 0.36, 1);
-        }
-
-        .progress-ring .center-text {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            text-align: center;
-            width: 100%;
-        }
-
-        .progress-ring .center-text .number {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.2rem;
-            color: #FFD700;
-            line-height: 1;
-        }
-
-        .progress-ring .center-text .label {
-            font-size: 0.4rem;
-            color: #888;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            display: block;
-        }
-
-        @media (min-width: 500px) {
-            .progress-ring .center-text .number {
-                font-size: 1.6rem;
-            }
-            .progress-ring .center-text .label {
-                font-size: 0.5rem;
-            }
-        }
-
-        .progress-info {
-            text-align: center;
-            color: #888;
-            font-size: 0.75rem;
-        }
-
-        .progress-info .big-text {
-            font-size: 0.9rem;
-            color: #FFD700;
-            font-weight: 700;
-        }
-
-        @media (max-width: 400px) {
-            .progress-info .big-text {
-                font-size: 0.8rem;
-            }
-            .progress-info {
-                font-size: 0.65rem;
-            }
-        }
-
         /* ---------- AD WATCH SECTION ---------- */
         .ad-section {
             background: rgba(18, 18, 16, 0.82);
@@ -547,11 +517,20 @@
             background: rgba(255, 255, 255, 0.05);
             padding: 3px 10px;
             border-radius: 30px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
 
-        .ad-section .section-header .ad-counter span {
+        .ad-section .section-header .ad-counter .session-ads {
             color: #FFD700;
             font-weight: 700;
+        }
+
+        .ad-section .section-header .ad-counter .cooldown-timer {
+            color: #ff4444;
+            font-weight: 600;
+            display: none;
         }
 
         .ad-display {
@@ -610,6 +589,20 @@
         .ad-display .ad-timer.show {
             display: block;
             animation: pulseTimer 1s ease-in-out infinite;
+        }
+
+        .ad-display .cooldown-msg {
+            text-align: center;
+            padding: 10px;
+            color: #ff4444;
+            font-size: 0.85rem;
+            display: none;
+        }
+
+        .ad-display .cooldown-msg i {
+            font-size: 1.5rem;
+            display: block;
+            margin-bottom: 6px;
         }
 
         @keyframes pulseTimer {
@@ -747,8 +740,8 @@
             display: block;
         }
 
-        /* ---------- DAILY LIMIT INFO ---------- */
-        .daily-limit-info {
+        /* ---------- SESSION LIMIT INFO ---------- */
+        .session-limit-info {
             display: flex;
             align-items: center;
             gap: 8px;
@@ -760,23 +753,23 @@
             flex-wrap: wrap;
         }
 
-        .daily-limit-info i {
+        .session-limit-info i {
             color: #FFD700;
             font-size: 0.9rem;
         }
 
-        .daily-limit-info .limit-text {
+        .session-limit-info .limit-text {
             flex: 1;
             font-size: 0.7rem;
             color: #aaa;
         }
 
-        .daily-limit-info .limit-text span {
+        .session-limit-info .limit-text span {
             color: #FFD700;
             font-weight: 700;
         }
 
-        .daily-limit-info .limit-progress {
+        .session-limit-info .limit-progress {
             width: 60px;
             height: 4px;
             background: rgba(255, 255, 255, 0.05);
@@ -784,7 +777,7 @@
             overflow: hidden;
         }
 
-        .daily-limit-info .limit-progress .bar {
+        .session-limit-info .limit-progress .bar {
             height: 100%;
             background: linear-gradient(90deg, #FFD700, #FFA500);
             border-radius: 10px;
@@ -792,10 +785,10 @@
         }
 
         @media (max-width: 400px) {
-            .daily-limit-info .limit-progress {
+            .session-limit-info .limit-progress {
                 width: 50px;
             }
-            .daily-limit-info .limit-text {
+            .session-limit-info .limit-text {
                 font-size: 0.6rem;
             }
         }
@@ -903,6 +896,24 @@
             font-family: 'Bebas Neue', sans-serif;
             font-size: 1.6rem;
             color: #FFD700;
+        }
+
+        .withdraw-limit-msg {
+            grid-column: 1 / -1;
+            padding: 8px 12px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 0.8rem;
+            display: none;
+            background: rgba(255, 68, 68, 0.08);
+            border: 1px solid rgba(255, 68, 68, 0.15);
+            color: #ff4444;
+        }
+
+        .withdraw-limit-msg.success {
+            background: rgba(76, 175, 80, 0.08);
+            border: 1px solid rgba(76, 175, 80, 0.15);
+            color: #4CAF50;
         }
 
         .btn-withdraw {
@@ -1053,6 +1064,276 @@
             padding: 10px 0;
         }
 
+        /* ============================================================
+           TEAM TAB STYLES
+           ============================================================ */
+        .team-section {
+            background: rgba(18, 18, 16, 0.82);
+            backdrop-filter: blur(14px);
+            border-radius: 20px;
+            padding: 18px 14px;
+            border: 1px solid rgba(255, 215, 0, 0.15);
+            margin-bottom: 16px;
+        }
+
+        .team-section h2 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.3rem;
+            color: #FFD700;
+            margin-bottom: 2px;
+        }
+
+        .team-section .team-sub {
+            color: #888;
+            font-size: 0.7rem;
+            margin-bottom: 12px;
+        }
+
+        /* Referral Link Box */
+        .referral-link-box {
+            display: flex;
+            gap: 8px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 6px;
+            border: 1px solid rgba(255, 215, 0, 0.1);
+            margin-bottom: 10px;
+        }
+
+        .referral-link-box input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: #fff;
+            padding: 8px 12px;
+            font-size: 0.7rem;
+            outline: none;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .referral-link-box input::placeholder {
+            color: #555;
+        }
+
+        .referral-link-box .btn-copy {
+            background: rgba(255, 215, 0, 0.1);
+            border: 1px solid rgba(255, 215, 0, 0.15);
+            color: #FFD700;
+            padding: 6px 14px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.7rem;
+            cursor: pointer;
+            transition: 0.3s;
+            font-family: 'Montserrat', sans-serif;
+            white-space: nowrap;
+        }
+
+        .referral-link-box .btn-copy:hover {
+            background: rgba(255, 215, 0, 0.2);
+        }
+
+        .referral-link-box .btn-share {
+            background: linear-gradient(135deg, #FFD700, #e6b800);
+            color: #0a0a0a;
+            border: none;
+            padding: 6px 14px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 0.7rem;
+            cursor: pointer;
+            transition: 0.3s;
+            font-family: 'Montserrat', sans-serif;
+            white-space: nowrap;
+        }
+
+        .referral-link-box .btn-share:hover {
+            transform: scale(1.04);
+        }
+
+        .invite-message {
+            text-align: center;
+            color: #FFD700;
+            font-size: 0.8rem;
+            padding: 6px;
+            background: rgba(255, 215, 0, 0.04);
+            border-radius: 8px;
+            border: 1px solid rgba(255, 215, 0, 0.06);
+            margin-bottom: 10px;
+        }
+
+        .team-bonus-message {
+            text-align: center;
+            color: #4CAF50;
+            font-size: 0.8rem;
+            padding: 8px;
+            background: rgba(76, 175, 80, 0.06);
+            border-radius: 8px;
+            border: 1px solid rgba(76, 175, 80, 0.1);
+            margin-bottom: 12px;
+        }
+
+        .team-bonus-message i {
+            margin-right: 6px;
+        }
+
+        /* Referral Earnings Boxes */
+        .referral-boxes {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        @media (max-width: 400px) {
+            .referral-boxes {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .referral-box {
+            background: rgba(255, 215, 0, 0.03);
+            border: 1px solid rgba(255, 215, 0, 0.08);
+            border-radius: 12px;
+            padding: 12px;
+            text-align: center;
+        }
+
+        .referral-box .box-icon {
+            font-size: 1.5rem;
+            margin-bottom: 4px;
+        }
+
+        .referral-box .box-label {
+            font-size: 0.6rem;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .referral-box .box-value {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.4rem;
+            color: #FFD700;
+        }
+
+        .referral-box .box-detail {
+            font-size: 0.6rem;
+            color: #666;
+            margin-top: 2px;
+        }
+
+        .referral-box .box-note {
+            font-size: 0.55rem;
+            color: #4CAF50;
+            margin-top: 4px;
+        }
+
+        /* Team Members */
+        .team-members h3 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1rem;
+            color: #FFD700;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .team-members-list {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            max-height: 150px;
+            overflow-y: auto;
+        }
+
+        .team-members-list::-webkit-scrollbar {
+            width: 3px;
+        }
+        .team-members-list::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 10px;
+        }
+        .team-members-list::-webkit-scrollbar-thumb {
+            background: rgba(255, 215, 0, 0.2);
+            border-radius: 10px;
+        }
+
+        .team-member {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 6px 10px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 8px;
+            font-size: 0.7rem;
+        }
+
+        .team-member .t-email {
+            color: #ddd;
+        }
+
+        .team-member .t-status {
+            font-size: 0.6rem;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 20px;
+        }
+
+        .team-member .t-status.active {
+            color: #4CAF50;
+            background: rgba(76, 175, 80, 0.1);
+        }
+
+        .team-member .t-status.inactive {
+            color: #ff4444;
+            background: rgba(255, 68, 68, 0.1);
+        }
+
+        .team-member .t-earned {
+            color: #FFD700;
+            font-weight: 600;
+            font-size: 0.65rem;
+        }
+
+        .team-empty {
+            text-align: center;
+            color: #555;
+            font-size: 0.75rem;
+            padding: 10px 0;
+        }
+
+        /* Team Stats */
+        .team-stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            padding: 10px;
+            background: rgba(255, 215, 0, 0.03);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 215, 0, 0.05);
+            margin-bottom: 12px;
+        }
+
+        .team-stats .stat-item {
+            text-align: center;
+        }
+
+        .team-stats .stat-item .stat-value {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.2rem;
+            color: #FFD700;
+        }
+
+        .team-stats .stat-item .stat-label {
+            font-size: 0.55rem;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: block;
+        }
+
         /* ---------- LEADERBOARD ---------- */
         .leaderboard-section {
             background: rgba(18, 18, 16, 0.82);
@@ -1157,7 +1438,7 @@
         }
 
         /* ============================================================
-           BOTTOM NAVIGATION - FULLY WORKING
+           BOTTOM NAVIGATION - 3 TABS
            ============================================================ */
         .bottom-nav {
             position: fixed;
@@ -1914,6 +2195,12 @@
             .float-wa i {
                 font-size: 1.2rem;
             }
+            .referral-boxes {
+                grid-template-columns: 1fr;
+            }
+            .team-stats {
+                gap: 15px;
+            }
         }
 
         /* ---------- VPN BLOCK OVERLAY ---------- */
@@ -2038,6 +2325,15 @@
     <!-- MAIN CONTENT -->
     <div class="main-content container">
 
+        <!-- ========== WITHDRAW TICKER ========== -->
+        <div class="withdraw-ticker" id="withdrawTicker">
+            <div class="ticker-wrap">
+                <div class="ticker-content" id="tickerContent">
+                    <span class="ticker-item"><i class="fas fa-trophy trophy"></i>Loading withdrawals...</span>
+                </div>
+            </div>
+        </div>
+
         <!-- ========== TAB 1: HOME (Ads + Stats) ========== -->
         <div class="tab-content active" id="tab-home">
 
@@ -2045,7 +2341,7 @@
             <div class="watch-hero">
                 <h1>💎 Watch & Earn</h1>
                 <p class="sub-title">Click ads, earn diamonds, and withdraw your earnings</p>
-                <div class="diamond-badge"><i class="fas fa-gem"></i> 1 Ad = 7 Diamonds</div>
+                <div class="diamond-badge"><i class="fas fa-gem"></i> 1 Ad = 100 Diamonds</div>
             </div>
 
             <!-- STATS -->
@@ -2062,9 +2358,9 @@
                 </div>
                 <div class="stat-card">
                     <div class="stat-icon"><i class="fas fa-calendar-day"></i></div>
-                    <div class="stat-value" id="todayAds">0</div>
-                    <div class="stat-label">Today's Ads</div>
-                    <div class="stat-diamond" id="todayLimit">0 / 20</div>
+                    <div class="stat-value" id="sessionAdsDisplay">0</div>
+                    <div class="stat-label">Session Ads</div>
+                    <div class="stat-diamond" id="sessionLimitDisplay">0 / 20</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-icon"><i class="fas fa-trophy"></i></div>
@@ -2073,30 +2369,15 @@
                 </div>
             </div>
 
-            <!-- PROGRESS RING -->
-            <div class="progress-ring-container">
-                <div class="progress-ring">
-                    <svg viewBox="0 0 120 120">
-                        <circle class="circle-bg" cx="60" cy="60" r="50"/>
-                        <circle class="circle-progress" id="progressCircle" cx="60" cy="60" r="50"
-                        stroke-dasharray="314.159" stroke-dashoffset="314.159"/>
-                    </svg>
-                    <div class="center-text">
-                        <div class="number" id="progressPercent">0%</div>
-                        <span class="label">to Withdraw</span>
-                    </div>
-                </div>
-                <div class="progress-info">
-                    <div class="big-text" id="progressAdsNeeded">1 ad needed</div>
-                    <div>Watch 1 ad to unlock withdrawal</div>
-                </div>
-            </div>
-
             <!-- AD WATCH SECTION -->
             <div class="ad-section">
                 <div class="section-header">
                     <h2><i class="fas fa-play-circle" style="margin-right:4px;"></i> Watch Ad</h2>
-                    <div class="ad-counter"><i class="fas fa-gem"></i> +7 &nbsp;|&nbsp; <span id="adCounterToday">0</span>/20</div>
+                    <div class="ad-counter">
+                        <i class="fas fa-gem"></i> +100 &nbsp;|&nbsp;
+                        <span class="session-ads" id="sessionAdsDisplayHeader">0</span>/20
+                        <span class="cooldown-timer" id="cooldownTimerDisplay"> ⏳ <span id="cooldownTime">30:00</span></span>
+                    </div>
                 </div>
 
                 <div class="ad-display" id="adDisplay">
@@ -2106,6 +2387,10 @@
                         <p style="font-size:0.65rem; color:#555; margin-top:3px;">Ad opens in new tab. Stay on ad for <strong style="color:#FFD700;">10 seconds</strong> to earn!</p>
                     </div>
                     <div class="ad-timer" id="adTimer"><i class="fas fa-clock"></i> <span id="timerSeconds">10</span>s</div>
+                    <div class="cooldown-msg" id="cooldownMsg">
+                        <i class="fas fa-hourglass-half"></i>
+                        <p id="cooldownMsgText">⏳ Cooldown: 30:00 remaining</p>
+                    </div>
                     <div class="ad-progress" id="adProgressBar">
                         <div class="bar" id="adProgressFill"></div>
                     </div>
@@ -2128,15 +2413,18 @@
                     </div>
                 </div>
 
-                <div class="daily-limit-info">
+                <!-- Session Limit Info -->
+                <div class="session-limit-info">
                     <i class="fas fa-info-circle"></i>
                     <div class="limit-text">
-                        Daily: <span id="dailyLimitText">0</span> / 20 ads
+                        Session: <span id="sessionLimitText">0</span> / 20 ads
                         <span style="color:#666; margin:0 4px;">|</span>
-                        <span>Earn <span style="color:#FFD700;">7 💎</span> each</span>
+                        <span>Earn <span style="color:#FFD700;">100 💎</span> each</span>
+                        <span style="color:#666; margin:0 4px;">|</span>
+                        <span style="color:#ff4444; font-size:0.6rem;" id="cooldownStatusText">⏳ 30 min cooldown</span>
                     </div>
                     <div class="limit-progress">
-                        <div class="bar" id="dailyProgressBar" style="width:0%;"></div>
+                        <div class="bar" id="sessionProgressBar" style="width:0%;"></div>
                     </div>
                 </div>
             </div>
@@ -2151,12 +2439,77 @@
 
         </div>
 
-        <!-- ========== TAB 2: WITHDRAW ========== -->
+        <!-- ========== TAB 2: TEAM ========== -->
+        <div class="tab-content" id="tab-team">
+
+            <div class="team-section">
+                <h2><i class="fas fa-users" style="color:#FFD700;"></i> Your Team</h2>
+                <p class="team-sub">Invite friends and earn bonuses!</p>
+
+                <!-- Referral Link -->
+                <div class="referral-link-box">
+                    <input type="text" id="referralLinkInput" readonly placeholder="Sign in to get your referral link" />
+                    <button class="btn-copy" onclick="copyReferralLink()"><i class="fas fa-copy"></i> Copy</button>
+                    <button class="btn-share" onclick="shareReferralLink()"><i class="fas fa-share-alt"></i> Share</button>
+                </div>
+
+                <!-- Invite Message -->
+                <div class="invite-message">
+                    💡 Invite your friend to get <strong>1000 Extra Bonus Points!</strong>
+                </div>
+
+                <!-- Team Bonus Message -->
+                <div class="team-bonus-message">
+                    <i class="fas fa-gift"></i> 🎯 Get 5% Extra Bonus From your team Earning
+                </div>
+
+                <!-- Referral Boxes -->
+                <div class="referral-boxes">
+                    <div class="referral-box">
+                        <div class="box-icon"><i class="fas fa-gift" style="color:#FFD700;"></i></div>
+                        <div class="box-label">Referral Bonus</div>
+                        <div class="box-value" id="referralBonusDisplay">0 💎</div>
+                        <div class="box-detail">50 💎 per referral</div>
+                        <div class="box-note">✅ Added to withdraw balance</div>
+                    </div>
+                    <div class="referral-box">
+                        <div class="box-icon"><i class="fas fa-users" style="color:#4CAF50;"></i></div>
+                        <div class="box-label">Team Earning (5%)</div>
+                        <div class="box-value" id="teamEarningDisplay">0 💎</div>
+                        <div class="box-detail" id="teamEarningDetail">5% of team total</div>
+                        <div class="box-note">✅ Added to withdraw balance</div>
+                    </div>
+                </div>
+
+                <!-- Team Stats -->
+                <div class="team-stats">
+                    <div class="stat-item">
+                        <div class="stat-value" id="teamCount">0</div>
+                        <span class="stat-label">👥 Members</span>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="teamTotalEarned">0 💎</div>
+                        <span class="stat-label">💰 Team Earned</span>
+                    </div>
+                </div>
+
+                <!-- Team Members -->
+                <div class="team-members">
+                    <h3><i class="fas fa-list"></i> Team Members</h3>
+                    <div class="team-members-list" id="teamMembersList">
+                        <div class="team-empty">No team members yet. Share your link!</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ========== TAB 3: WITHDRAW ========== -->
         <div class="tab-content" id="tab-withdraw">
 
             <div class="withdraw-tab-section">
                 <h2>💰 Withdraw Earnings</h2>
-                <p class="withdraw-sub">Minimum 01 ad required. Withdrawals processed within 24 hours.</p>
+                <p class="withdraw-sub">Minimum <strong>15,000 💎</strong> required to withdraw.</p>
 
                 <div class="withdraw-grid">
                     <!-- Personal Info -->
@@ -2189,14 +2542,20 @@
                         <span class="label">Available Balance</span>
                         <div class="value" id="withdrawBalanceDisplay">0 💎</div>
                     </div>
+
+                    <!-- Withdraw Limit Message -->
+                    <div class="withdraw-limit-msg" id="withdrawLimitMsg">
+                        ⚠️ Withdraw available at 15,000 diamond points
+                    </div>
+
                     <div class="form-group full-width">
                         <label>Amount to Withdraw <span class="required">*</span></label>
-                        <input type="number" id="withdrawAmountInput" placeholder="Enter amount" min="1" />
-                        <small style="color:#666; font-size:0.6rem; margin-top:2px;">Max: <span id="availableDiamonds" style="color:#FFD700;">0</span> diamonds</small>
+                        <input type="number" id="withdrawAmountInput" placeholder="🔒 Minimum 15,000 required" min="15000" disabled />
+                        <small style="color:#666; font-size:0.6rem; margin-top:2px;">Min: <span style="color:#FFD700;">15,000</span> | Max: <span id="availableDiamonds" style="color:#FFD700;">0</span> diamonds</small>
                     </div>
 
                     <button class="btn-withdraw" id="withdrawBtn" disabled>
-                        <i class="fas fa-hand-holding-usd"></i> Request Withdrawal
+                        <i class="fas fa-lock"></i> Minimum 15,000 Required
                     </button>
                 </div>
 
@@ -2220,12 +2579,16 @@
     </div>
 
     <!-- ============================================================
-         BOTTOM NAVIGATION - FULLY WORKING
+         BOTTOM NAVIGATION - 3 TABS (Home | Team | Withdraw)
          ============================================================ -->
     <nav class="bottom-nav" id="bottomNav">
         <button class="nav-item active" data-tab="home" id="navHome">
             <i class="fas fa-home"></i>
             <span>Home</span>
+        </button>
+        <button class="nav-item" data-tab="team" id="navTeam">
+            <i class="fas fa-users"></i>
+            <span>Team</span>
         </button>
         <button class="nav-item" data-tab="withdraw" id="navWithdraw">
             <i class="fas fa-hand-holding-usd"></i>
@@ -2272,6 +2635,18 @@
         }
 
         // ============================================================
+        // CONSTANTS
+        // ============================================================
+        const AD_WATCH_TIME = 10;
+        const DIAMONDS_PER_AD = 100;
+        const SESSION_AD_LIMIT = 20;
+        const COOLDOWN_MINUTES = 30;
+        const MIN_WITHDRAW_LIMIT = 15000;
+        const REFERRAL_BONUS = 1000;
+        const REFERRER_BONUS = 50;
+        const TEAM_BONUS_PERCENT = 5;
+
+        // ============================================================
         // DOM ELEMENTS
         // ============================================================
         const headerSignInBtn = document.getElementById('headerSignInBtn');
@@ -2279,8 +2654,8 @@
         // Stats
         const totalDiamondsEl = document.getElementById('totalDiamonds');
         const totalAdsWatchedEl = document.getElementById('totalAdsWatched');
-        const todayAdsEl = document.getElementById('todayAds');
-        const todayLimitEl = document.getElementById('todayLimit');
+        const sessionAdsDisplay = document.getElementById('sessionAdsDisplay');
+        const sessionLimitDisplay = document.getElementById('sessionLimitDisplay');
         const rankDisplayEl = document.getElementById('rankDisplay');
 
         // Ad controls
@@ -2291,12 +2666,14 @@
         const adTimer = document.getElementById('adTimer');
         const timerSecondsEl = document.getElementById('timerSeconds');
         const adProgressFill = document.getElementById('adProgressFill');
-        const adCounterToday = document.getElementById('adCounterToday');
-        const dailyLimitText = document.getElementById('dailyLimitText');
-        const dailyProgressBar = document.getElementById('dailyProgressBar');
-        const progressCircle = document.getElementById('progressCircle');
-        const progressPercent = document.getElementById('progressPercent');
-        const progressAdsNeeded = document.getElementById('progressAdsNeeded');
+        const sessionAdsDisplayHeader = document.getElementById('sessionAdsDisplayHeader');
+        const cooldownTimerDisplay = document.getElementById('cooldownTimerDisplay');
+        const cooldownTime = document.getElementById('cooldownTime');
+        const cooldownMsg = document.getElementById('cooldownMsg');
+        const cooldownMsgText = document.getElementById('cooldownMsgText');
+        const sessionLimitText = document.getElementById('sessionLimitText');
+        const sessionProgressBar = document.getElementById('sessionProgressBar');
+        const cooldownStatusText = document.getElementById('cooldownStatusText');
 
         // Balance display
         const balanceDisplay = document.getElementById('balanceDisplay');
@@ -2312,10 +2689,31 @@
         const withdrawBalanceDisplay = document.getElementById('withdrawBalanceDisplay');
         const withdrawBtn = document.getElementById('withdrawBtn');
         const withdrawStatus = document.getElementById('withdrawStatus');
+        const withdrawLimitMsg = document.getElementById('withdrawLimitMsg');
         const historyList = document.getElementById('historyList');
+
+        // Team
+        const referralLinkInput = document.getElementById('referralLinkInput');
+        const referralBonusDisplay = document.getElementById('referralBonusDisplay');
+        const teamEarningDisplay = document.getElementById('teamEarningDisplay');
+        const teamEarningDetail = document.getElementById('teamEarningDetail');
+        const teamCount = document.getElementById('teamCount');
+        const teamTotalEarned = document.getElementById('teamTotalEarned');
+        const teamMembersList = document.getElementById('teamMembersList');
+
+        // Ticker
+        const tickerContent = document.getElementById('tickerContent');
 
         // Leaderboard
         const leaderboardList = document.getElementById('leaderboardList');
+
+        // Navigation
+        const navHome = document.getElementById('navHome');
+        const navTeam = document.getElementById('navTeam');
+        const navWithdraw = document.getElementById('navWithdraw');
+        const tabHome = document.getElementById('tab-home');
+        const tabTeam = document.getElementById('tab-team');
+        const tabWithdraw = document.getElementById('tab-withdraw');
 
         // ============================================================
         // STATE
@@ -2329,42 +2727,40 @@
         let elapsedTime = 0;
         let currentAdLink = '';
         let isPaused = false;
-        const AD_WATCH_TIME = 10;
-        const DIAMONDS_PER_AD = 7;
-        const DAILY_AD_LIMIT = 20;
-        const ADS_NEEDED_FOR_WITHDRAW = 1;
+        let currentTab = 'home';
 
         let currentUser = null;
         let userData = null;
         let userDocRef = null;
         let todayDate = '';
         let adWindow = null;
-        let currentTab = 'home';
+
+        // Session state
+        let sessionAds = 0;
+        let sessionCooldownUntil = null;
 
         // ============================================================
-        // BOTTOM NAVIGATION - TAB SWITCHING
+        // BOTTOM NAVIGATION - 3 TABS
         // ============================================================
-        const navHome = document.getElementById('navHome');
-        const navWithdraw = document.getElementById('navWithdraw');
-        const tabHome = document.getElementById('tab-home');
-        const tabWithdraw = document.getElementById('tab-withdraw');
-
         function switchTab(tab) {
-            // Hide all tabs
             document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
 
-            // Show selected tab
             if (tab === 'home') {
                 tabHome.classList.add('active');
                 navHome.classList.add('active');
-                navWithdraw.classList.remove('active');
                 currentTab = 'home';
+            } else if (tab === 'team') {
+                tabTeam.classList.add('active');
+                navTeam.classList.add('active');
+                currentTab = 'team';
+                if (currentUser) {
+                    loadTeamData();
+                }
             } else if (tab === 'withdraw') {
                 tabWithdraw.classList.add('active');
                 navWithdraw.classList.add('active');
-                navHome.classList.remove('active');
                 currentTab = 'withdraw';
-                // Refresh withdraw data when switching
                 if (currentUser) {
                     updateWithdrawStatus();
                     updateHistory();
@@ -2373,13 +2769,9 @@
             }
         }
 
-        navHome.addEventListener('click', function() {
-            switchTab('home');
-        });
-
-        navWithdraw.addEventListener('click', function() {
-            switchTab('withdraw');
-        });
+        navHome.addEventListener('click', function() { switchTab('home'); });
+        navTeam.addEventListener('click', function() { switchTab('team'); });
+        navWithdraw.addEventListener('click', function() { switchTab('withdraw'); });
 
         // ============================================================
         // LOADING SCREEN
@@ -2406,6 +2798,26 @@
                 .catch(() => {
                     console.log('VPN check failed, allowing access');
                 });
+        }
+
+        // ============================================================
+        // DEVICE REGISTRATION CHECK (Local Storage)
+        // ============================================================
+        function checkDeviceRegistration() {
+            const registered = localStorage.getItem('deviceRegistered');
+            if (registered) {
+                showCustomPopup('warning', '⚠️ Device Already Used',
+                    'This device already has a registered account.\n\n📧 Registered email: ' + registered +
+                    '\n\nOnly one account per device is allowed.',
+                    'OK');
+                return false;
+            }
+            return true;
+        }
+
+        function markDeviceRegistered(email) {
+            localStorage.setItem('deviceRegistered', email);
+            localStorage.setItem('deviceRegisteredAt', new Date().toISOString());
         }
 
         // ============================================================
@@ -2454,7 +2866,7 @@
         }
 
         // ============================================================
-        // LOGIN POPUP
+        // LOGIN POPUP (With Device Check)
         // ============================================================
         let loginPopupShown = false;
 
@@ -2548,6 +2960,7 @@
                 });
             });
 
+            // SIGN IN
             document.getElementById('emailSignInBtn').addEventListener('click', function() {
                 const email = document.getElementById('loginEmail').value.trim();
                 const password = document.getElementById('loginPassword').value.trim();
@@ -2586,12 +2999,18 @@
                     });
             });
 
+            // SIGN UP (WITH DEVICE CHECK)
             document.getElementById('emailSignUpBtn').addEventListener('click', function() {
                 const name = document.getElementById('signupName').value.trim();
                 const email = document.getElementById('signupEmail').value.trim();
                 const password = document.getElementById('signupPassword').value.trim();
                 const errorEl = document.getElementById('signupError');
                 const successEl = document.getElementById('signupSuccess');
+
+                // ✅ DEVICE CHECK
+                if (!checkDeviceRegistration()) {
+                    return;
+                }
 
                 if (!name || !email || !password) {
                     errorEl.textContent = 'Please fill all fields.';
@@ -2616,6 +3035,9 @@
                             .then(() => result.user);
                     })
                     .then((user) => {
+                        // ✅ MARK DEVICE AS REGISTERED
+                        markDeviceRegistered(email);
+
                         successEl.textContent = '✅ Verification email sent to ' + email;
                         successEl.style.display = 'block';
                         this.disabled = false;
@@ -2632,11 +3054,21 @@
                     });
             });
 
+            // GOOGLE SIGN IN (WITH DEVICE CHECK)
             function handleGoogleSignIn() {
+                // ✅ DEVICE CHECK
+                if (!checkDeviceRegistration()) {
+                    return;
+                }
+
                 const provider = new firebase.auth.GoogleAuthProvider();
                 provider.setCustomParameters({ prompt: 'select_account' });
                 auth.signInWithPopup(provider)
-                    .then(() => { closeLoginPopup(); })
+                    .then((result) => {
+                        // ✅ MARK DEVICE AS REGISTERED
+                        markDeviceRegistered(result.user.email);
+                        closeLoginPopup();
+                    })
                     .catch((error) => {
                         showCustomPopup('error', 'Google Sign In Failed', `❌ ${error.message}`, 'OK');
                     });
@@ -2678,30 +3110,71 @@
 
                 initializeUserData(user);
                 checkVPNStatus();
+
+                // Update referral link
+                if (referralLinkInput) {
+                    referralLinkInput.value = getReferralLink(user.uid);
+                }
+
+                // Load team data if team tab is active
+                if (currentTab === 'team') {
+                    loadTeamData();
+                }
+
+                // Load ticker
+                loadWithdrawTicker();
+
             } else {
                 currentUser = null;
                 userData = null;
                 headerSignInBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> <span class="sign-text">Sign In</span>';
 
+                // Reset UI
                 totalDiamondsEl.textContent = '0';
                 totalAdsWatchedEl.textContent = '0';
-                todayAdsEl.textContent = '0';
-                todayLimitEl.textContent = '0 / 20';
-                adCounterToday.textContent = '0';
-                dailyLimitText.textContent = '0';
-                dailyProgressBar.style.width = '0%';
-                updateProgressRing(0);
+                sessionAdsDisplay.textContent = '0';
+                sessionLimitDisplay.textContent = '0 / 20';
                 withdrawBtn.disabled = true;
                 availableDiamonds.textContent = '0';
                 withdrawBalanceDisplay.textContent = '0 💎';
                 balanceDisplay.textContent = '0';
                 adsDisplay.textContent = '0';
                 rankDisplayEl.textContent = '-';
+                sessionAdsDisplayHeader.textContent = '0';
+                sessionLimitText.textContent = '0';
+                sessionProgressBar.style.width = '0%';
+                cooldownStatusText.style.display = 'none';
+
                 leaderboardList.innerHTML =
                     '<div style="text-align:center; color:#555; padding:12px 0; font-size:0.8rem;">Sign in to see leaderboard</div>';
                 watchAdBtn.disabled = true;
                 watchAdBtn.title = 'Sign in to watch ads';
                 historyList.innerHTML = '<div class="history-empty">Sign in to see history</div>';
+
+                // Team section
+                referralLinkInput.value = 'Sign in to get your referral link';
+                referralBonusDisplay.textContent = '0 💎';
+                teamEarningDisplay.textContent = '0 💎';
+                teamEarningDetail.textContent = '5% of team total';
+                teamCount.textContent = '0';
+                teamTotalEarned.textContent = '0 💎';
+                teamMembersList.innerHTML = '<div class="team-empty">Sign in to see your team</div>';
+
+                // Withdraw limit message
+                withdrawLimitMsg.style.display = 'none';
+                withdrawLimitMsg.className = 'withdraw-limit-msg';
+                withdrawAmountInput.disabled = true;
+                withdrawAmountInput.placeholder = '🔒 Minimum 15,000 required';
+                withdrawBtn.innerHTML = '<i class="fas fa-lock"></i> Minimum 15,000 Required';
+
+                // Ticker
+                tickerContent.innerHTML =
+                    '<span class="ticker-item"><i class="fas fa-trophy trophy"></i>Sign in to see withdrawals</span>';
+
+                // Cooldown
+                cooldownTimerDisplay.style.display = 'none';
+                cooldownMsg.style.display = 'none';
+                cooldownStatusText.style.display = 'none';
             }
         });
 
@@ -2724,37 +3197,48 @@
                         totalDiamonds: 0,
                         totalAdsWatched: 0,
                         createdAt: new Date().toISOString(),
-                        dailyAds: {},
+                        lastLogin: new Date().toISOString(),
                         withdrawals: [],
-                        rank: 0,
-                        rejectedWithdrawals: [],
                         accountName: '',
                         accountEmail: user.email || '',
                         accountMethod: '',
-                        accountNumber: ''
+                        accountNumber: '',
+                        // Session tracking
+                        sessionAds: 0,
+                        sessionCooldownUntil: null,
+                        // Referral tracking
+                        referrals: [],
+                        referralCount: 0,
+                        referralBonus: 0,
+                        teamEarning: 0,
+                        referredBy: null,
+                        rank: 0
                     };
                     await userDocRef.set(newUserData);
                     userData = newUserData;
                 } else {
                     userData = doc.data();
+                    // Set defaults for new fields
                     if (!userData.accountName) userData.accountName = '';
                     if (!userData.accountEmail) userData.accountEmail = user.email || '';
                     if (!userData.accountMethod) userData.accountMethod = '';
                     if (!userData.accountNumber) userData.accountNumber = '';
+                    if (!userData.sessionAds) userData.sessionAds = 0;
+                    if (!userData.sessionCooldownUntil) userData.sessionCooldownUntil = null;
+                    if (!userData.referrals) userData.referrals = [];
+                    if (!userData.referralCount) userData.referralCount = 0;
+                    if (!userData.referralBonus) userData.referralBonus = 0;
+                    if (!userData.teamEarning) userData.teamEarning = 0;
+                    if (!userData.referredBy) userData.referredBy = null;
+
                     await checkRejectedWithdrawals();
                 }
 
-                if (!userData.dailyAds) {
-                    userData.dailyAds = {};
-                    await userDocRef.update({ dailyAds: {} });
-                }
-
-                if (!userData.dailyAds[todayDate]) {
-                    userData.dailyAds[todayDate] = 0;
-                    await userDocRef.update({
-                        [`dailyAds.${todayDate}`]: 0
-                    });
-                }
+                // Update last login
+                await userDocRef.update({
+                    lastLogin: new Date().toISOString()
+                });
+                userData.lastLogin = new Date().toISOString();
 
                 // Load account info
                 withdrawName.value = userData.accountName || '';
@@ -2762,10 +3246,20 @@
                 withdrawMethod.value = userData.accountMethod || '';
                 withdrawAccount.value = userData.accountNumber || '';
 
+                // Load session data
+                sessionAds = userData.sessionAds || 0;
+                sessionCooldownUntil = userData.sessionCooldownUntil || null;
+
+                // Check cooldown
+                checkCooldownStatus();
+
                 updateUI();
                 loadLeaderboard();
                 updateWithdrawStatus();
                 updateHistory();
+
+                // Update referral link
+                referralLinkInput.value = getReferralLink(user.uid);
 
             } catch (error) {
                 console.error('Error initializing user data:', error);
@@ -2799,31 +3293,122 @@
         }
 
         // ============================================================
-        // UPDATE UI
+        // COOLDOWN CHECK
+        // ============================================================
+        function checkCooldownStatus() {
+            const now = new Date();
+            let isCooldownActive = false;
+            let remainingSeconds = 0;
+
+            if (sessionCooldownUntil) {
+                const cooldownEnd = new Date(sessionCooldownUntil);
+                if (now < cooldownEnd) {
+                    isCooldownActive = true;
+                    remainingSeconds = Math.ceil((cooldownEnd - now) / 1000);
+                } else {
+                    // Cooldown over - reset session
+                    sessionAds = 0;
+                    sessionCooldownUntil = null;
+                    userData.sessionAds = 0;
+                    userData.sessionCooldownUntil = null;
+                    userDocRef.update({
+                        sessionAds: 0,
+                        sessionCooldownUntil: null
+                    }).catch(() => {});
+                }
+            }
+
+            return { isActive: isCooldownActive, remainingSeconds: remainingSeconds };
+        }
+
+        // ============================================================
+        // UPDATE UI (Progress Ring Removed)
         // ============================================================
         function updateUI() {
             if (!userData) return;
 
-            const dailyCount = userData.dailyAds[todayDate] || 0;
-            const totalDiamonds = userData.totalDiamonds || 0;
+            const totalDiamonds = (userData.totalDiamonds || 0) + (userData.referralBonus || 0) + (userData.teamEarning ||
+            0);
             const totalAds = userData.totalAdsWatched || 0;
+            const sessionAdsCount = userData.sessionAds || 0;
 
             // Stats
             totalDiamondsEl.textContent = totalDiamonds;
             totalAdsWatchedEl.textContent = totalAds;
-            todayAdsEl.textContent = dailyCount;
-            todayLimitEl.textContent = `${dailyCount} / ${DAILY_AD_LIMIT}`;
+            sessionAdsDisplay.textContent = sessionAdsCount;
+            sessionLimitDisplay.textContent = `${sessionAdsCount} / ${SESSION_AD_LIMIT}`;
 
             // Ad section
-            adCounterToday.textContent = dailyCount;
-            dailyLimitText.textContent = dailyCount;
-            dailyProgressBar.style.width = `${Math.min((dailyCount / DAILY_AD_LIMIT) * 100, 100)}%`;
+            sessionAdsDisplayHeader.textContent = sessionAdsCount;
+            sessionLimitText.textContent = sessionAdsCount;
+            sessionProgressBar.style.width = `${Math.min((sessionAdsCount / SESSION_AD_LIMIT) * 100, 100)}%`;
             balanceDisplay.textContent = totalDiamonds;
             adsDisplay.textContent = totalAds;
 
-            // Progress ring
-            const progress = Math.min(totalAds / ADS_NEEDED_FOR_WITHDRAW, 1);
-            updateProgressRing(progress);
+            // Check cooldown
+            const cooldown = checkCooldownStatus();
+
+            if (cooldown.isActive) {
+                // Show cooldown
+                cooldownTimerDisplay.style.display = 'inline';
+                cooldownMsg.style.display = 'block';
+                cooldownStatusText.style.display = 'inline';
+                cooldownStatusText.textContent = `⏳ ${Math.ceil(cooldown.remainingSeconds / 60)} min cooldown`;
+                cooldownMsgText.textContent = `⏳ Cooldown: ${Math.ceil(cooldown.remainingSeconds / 60)} min remaining`;
+                const mins = Math.floor(cooldown.remainingSeconds / 60);
+                const secs = Math.floor(cooldown.remainingSeconds % 60);
+                cooldownTime.textContent = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+
+                // Disable watch button
+                watchAdBtn.disabled = true;
+                watchAdBtn.textContent = '⏳ Cooldown Active';
+                watchAdBtn.classList.remove('redirecting', 'continue-btn');
+
+                // Show cooldown in ad display
+                adPlaceholder.style.display = 'none';
+                cooldownMsg.style.display = 'block';
+
+                // Update cooldown timer every second
+                if (window.cooldownInterval) clearInterval(window.cooldownInterval);
+                window.cooldownInterval = setInterval(() => {
+                    const updatedCooldown = checkCooldownStatus();
+                    if (!updatedCooldown.isActive) {
+                        clearInterval(window.cooldownInterval);
+                        cooldownTimerDisplay.style.display = 'none';
+                        cooldownMsg.style.display = 'none';
+                        cooldownStatusText.style.display = 'none';
+                        adPlaceholder.style.display = 'block';
+                        updateUI();
+                        return;
+                    }
+                    const mins = Math.floor(updatedCooldown.remainingSeconds / 60);
+                    const secs = Math.floor(updatedCooldown.remainingSeconds % 60);
+                    cooldownTime.textContent = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+                    cooldownMsgText.textContent = `⏳ Cooldown: ${mins} min ${secs} sec remaining`;
+                    cooldownStatusText.textContent = `⏳ ${mins} min cooldown`;
+                }, 1000);
+
+            } else {
+                // No cooldown
+                cooldownTimerDisplay.style.display = 'none';
+                cooldownMsg.style.display = 'none';
+                cooldownStatusText.style.display = 'none';
+                adPlaceholder.style.display = 'block';
+                if (window.cooldownInterval) {
+                    clearInterval(window.cooldownInterval);
+                    window.cooldownInterval = null;
+                }
+
+                // Enable watch button if session not full
+                if (sessionAdsCount < SESSION_AD_LIMIT && !isWatching && !isRedirecting && !isPaused) {
+                    watchAdBtn.disabled = false;
+                    watchAdBtn.textContent = '<i class="fas fa-external-link-alt"></i> Watch Ad';
+                    watchAdBtn.classList.remove('redirecting', 'continue-btn');
+                } else if (sessionAdsCount >= SESSION_AD_LIMIT) {
+                    // Start cooldown
+                    startCooldown();
+                }
+            }
 
             // Rank
             if (userData.rank) {
@@ -2832,48 +3417,65 @@
                 rankDisplayEl.textContent = '-';
             }
 
-            // Withdraw section
-            const canWithdraw = totalAds >= ADS_NEEDED_FOR_WITHDRAW && totalDiamonds > 0;
-            withdrawBtn.disabled = !canWithdraw;
+            // Withdraw section - Check 15,000 limit
+            const canWithdraw = totalDiamonds >= MIN_WITHDRAW_LIMIT && totalDiamonds > 0;
+
+            if (totalDiamonds >= MIN_WITHDRAW_LIMIT) {
+                withdrawLimitMsg.className = 'withdraw-limit-msg success';
+                withdrawLimitMsg.textContent = '✅ You can withdraw now!';
+                withdrawLimitMsg.style.display = 'block';
+                withdrawAmountInput.disabled = false;
+                withdrawAmountInput.placeholder = 'Enter amount';
+                withdrawAmountInput.min = 15000;
+                withdrawBtn.disabled = false;
+                withdrawBtn.innerHTML = '<i class="fas fa-hand-holding-usd"></i> Request Withdrawal';
+            } else {
+                withdrawLimitMsg.className = 'withdraw-limit-msg';
+                withdrawLimitMsg.textContent = `⚠️ Withdraw available at ${MIN_WITHDRAW_LIMIT.toLocaleString()} diamond points`;
+                withdrawLimitMsg.style.display = 'block';
+                withdrawAmountInput.disabled = true;
+                withdrawAmountInput.placeholder = `🔒 Minimum ${MIN_WITHDRAW_LIMIT.toLocaleString()} required`;
+                withdrawBtn.disabled = true;
+                withdrawBtn.innerHTML = `<i class="fas fa-lock"></i> Minimum ${MIN_WITHDRAW_LIMIT.toLocaleString()} Required`;
+            }
+
             availableDiamonds.textContent = totalDiamonds;
             withdrawBalanceDisplay.textContent = `${totalDiamonds} 💎`;
 
             withdrawAmountInput.max = totalDiamonds;
             withdrawAmountInput.placeholder = `Max ${totalDiamonds}`;
             validateWithdrawAmount();
+        }
 
-            // Watch button
-            const canWatch = dailyCount < DAILY_AD_LIMIT && !isWatching && !isRedirecting && !isPaused;
-            if (!isPaused) {
-                watchAdBtn.disabled = !canWatch;
-            }
-            if (dailyCount >= DAILY_AD_LIMIT) {
-                watchAdBtn.title = 'Daily limit reached (20 ads)';
-            } else if (isWatching || isRedirecting) {
-                watchAdBtn.title = 'Please wait for current ad to complete';
-            } else if (isPaused) {
-                watchAdBtn.title = 'Click to continue watching';
-            } else {
-                watchAdBtn.title = 'Click to watch ad and earn 7 diamonds';
-            }
+        // ============================================================
+        // START COOLDOWN
+        // ============================================================
+        function startCooldown() {
+            const now = new Date();
+            const cooldownEnd = new Date(now.getTime() + COOLDOWN_MINUTES * 60000);
+            sessionCooldownUntil = cooldownEnd.toISOString();
+            userData.sessionCooldownUntil = sessionCooldownUntil;
+            userDocRef.update({
+                sessionCooldownUntil: sessionCooldownUntil
+            }).catch(() => {});
 
-            if (totalAds >= ADS_NEEDED_FOR_WITHDRAW) {
-                progressAdsNeeded.textContent = '✅ Withdrawal ready!';
-            } else {
-                progressAdsNeeded.textContent = `${ADS_NEEDED_FOR_WITHDRAW - totalAds} more ad needed`;
-            }
+            updateUI();
         }
 
         // ============================================================
         // VALIDATE WITHDRAW AMOUNT
         // ============================================================
         function validateWithdrawAmount() {
-            const totalDiamonds = userData?.totalDiamonds || 0;
+            const totalDiamonds = (userData?.totalDiamonds || 0) + (userData?.referralBonus || 0) + (userData?.teamEarning ||
+            0);
             const amount = parseInt(withdrawAmountInput.value) || 0;
 
             if (amount > totalDiamonds) {
                 withdrawAmountInput.classList.add('error');
                 withdrawAmountInput.setCustomValidity('Amount exceeds available diamonds');
+            } else if (amount < 15000 && totalDiamonds >= 15000) {
+                withdrawAmountInput.classList.add('error');
+                withdrawAmountInput.setCustomValidity(`Minimum ${MIN_WITHDRAW_LIMIT.toLocaleString()} diamonds required`);
             } else if (amount < 1) {
                 withdrawAmountInput.classList.add('error');
                 withdrawAmountInput.setCustomValidity('Enter at least 1 diamond');
@@ -2884,16 +3486,6 @@
         }
 
         withdrawAmountInput.addEventListener('input', validateWithdrawAmount);
-
-        // ============================================================
-        // PROGRESS RING
-        // ============================================================
-        function updateProgressRing(progress) {
-            const circumference = 314.159;
-            const offset = circumference - (progress * circumference);
-            progressCircle.style.strokeDashoffset = offset;
-            progressPercent.textContent = `${Math.round(progress * 100)}%`;
-        }
 
         // ============================================================
         // UPDATE WITHDRAW STATUS
@@ -2969,7 +3561,7 @@
         }
 
         // ============================================================
-        // WATCH AD - WITH CONTINUE/RESUME SUPPORT
+        // WATCH AD - WITH SESSION & COOLDOWN
         // ============================================================
         watchAdBtn.addEventListener('click', function() {
             if (!currentUser) {
@@ -2983,13 +3575,23 @@
             }
 
             if (isWatching || isRedirecting) return;
-            if (watchAdBtn.disabled) {
-                const dailyCount = userData?.dailyAds[todayDate] || 0;
-                if (dailyCount >= DAILY_AD_LIMIT) {
-                    showCustomPopup('warning', 'Daily Limit Reached',
-                        'You have reached the daily limit of 20 ads.\nCome back tomorrow to earn more diamonds!',
-                        'OK');
-                }
+
+            // Check cooldown
+            const cooldown = checkCooldownStatus();
+            if (cooldown.isActive) {
+                showCustomPopup('warning', '⏳ Cooldown Active',
+                    `You need to wait ${Math.ceil(cooldown.remainingSeconds / 60)} minutes before watching more ads.`,
+                    'OK');
+                return;
+            }
+
+            // Check session limit
+            if (sessionAds >= SESSION_AD_LIMIT) {
+                startCooldown();
+                showCustomPopup('warning', '⏳ Session Complete',
+                    `You've watched ${SESSION_AD_LIMIT} ads!\nTake a ${COOLDOWN_MINUTES} minute break.`,
+                    'OK');
+                updateUI();
                 return;
             }
 
@@ -3197,7 +3799,7 @@
             adPlaceholder.innerHTML = `
                     <i class="fas fa-check-circle" style="color:#4CAF50; font-size:2.5rem;"></i>
                     <p style="font-size:1rem; color:#4CAF50; margin-top:6px;">Ad Watched Successfully! 🎉</p>
-                    <p style="font-size:0.7rem; color:#888;">+7 diamonds added to your account</p>
+                    <p style="font-size:0.7rem; color:#888;">+100 diamonds added to your account</p>
                 `;
 
             nextAdBtn.disabled = false;
@@ -3239,34 +3841,39 @@
             if (!currentUser || !userDocRef) return;
 
             try {
-                const dailyCount = (userData.dailyAds[todayDate] || 0) + 1;
+                const newSessionAds = (userData.sessionAds || 0) + 1;
                 const totalAds = (userData.totalAdsWatched || 0) + 1;
                 const totalDiamonds = (userData.totalDiamonds || 0) + DIAMONDS_PER_AD;
 
                 await userDocRef.update({
-                    [`dailyAds.${todayDate}`]: dailyCount,
+                    sessionAds: newSessionAds,
                     totalAdsWatched: totalAds,
                     totalDiamonds: totalDiamonds
                 });
 
-                userData.dailyAds[todayDate] = dailyCount;
+                userData.sessionAds = newSessionAds;
                 userData.totalAdsWatched = totalAds;
                 userData.totalDiamonds = totalDiamonds;
+                sessionAds = newSessionAds;
+
+                // Update session in state
+                sessionAds = newSessionAds;
 
                 updateUI();
 
-                showCustomPopup('success', '💎 +7 Diamonds!',
-                    `You earned 7 diamonds!\nTotal: ${totalDiamonds} diamonds | Ads: ${totalAds}`, 'OK');
+                showCustomPopup('success', '💎 +100 Diamonds!',
+                    `You earned 100 diamonds!\nTotal: ${totalDiamonds} diamonds | Ads: ${totalAds}`, 'OK');
 
-                if (dailyCount < DAILY_AD_LIMIT) {
-                    watchAdBtn.disabled = false;
-                    watchAdBtn.innerHTML = '<i class="fas fa-external-link-alt"></i> Watch Ad';
-                } else {
-                    watchAdBtn.disabled = true;
-                    watchAdBtn.innerHTML = '🚫 Daily Limit Reached';
+                // Check if session complete
+                if (newSessionAds >= SESSION_AD_LIMIT) {
+                    startCooldown();
+                    showCustomPopup('info', '🎯 Session Complete!',
+                        `You've completed ${SESSION_AD_LIMIT} ads!\nTake a ${COOLDOWN_MINUTES} minute break.`,
+                        'OK');
                 }
 
                 loadLeaderboard();
+                loadWithdrawTicker();
 
             } catch (error) {
                 console.error('Error saving ad progress:', error);
@@ -3284,6 +3891,185 @@
             resetAdUI();
             updateUI();
         });
+
+        // ============================================================
+        // REFERRAL FUNCTIONS
+        // ============================================================
+        function getReferralLink(userId) {
+            const baseUrl = window.location.origin + window.location.pathname;
+            return `${baseUrl}?ref=${userId}`;
+        }
+
+        function copyReferralLink() {
+            if (!currentUser) {
+                showLoginPopup();
+                return;
+            }
+            const link = referralLinkInput.value;
+            if (!link || link === 'Sign in to get your referral link') {
+                showCustomPopup('warning', 'Sign In Required', 'Please sign in to get your referral link.', 'OK');
+                return;
+            }
+            navigator.clipboard.writeText(link).then(() => {
+                showCustomPopup('success', '✅ Copied!', 'Referral link copied to clipboard!', 'OK');
+            }).catch(() => {
+                // Fallback
+                const textArea = document.createElement('textarea');
+                textArea.value = link;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                showCustomPopup('success', '✅ Copied!', 'Referral link copied to clipboard!', 'OK');
+            });
+        }
+
+        function shareReferralLink() {
+            if (!currentUser) {
+                showLoginPopup();
+                return;
+            }
+            const link = referralLinkInput.value;
+            if (!link || link === 'Sign in to get your referral link') {
+                showCustomPopup('warning', 'Sign In Required', 'Please sign in to get your referral link.', 'OK');
+                return;
+            }
+
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Join Learn with Shan!',
+                    text: 'Earn diamonds by watching ads! Use my referral link:',
+                    url: link
+                }).catch(() => {});
+            } else {
+                copyReferralLink();
+            }
+        }
+
+        // ============================================================
+        // LOAD TEAM DATA
+        // ============================================================
+        async function loadTeamData() {
+            if (!currentUser || !userData) {
+                teamMembersList.innerHTML = '<div class="team-empty">Sign in to see your team</div>';
+                return;
+            }
+
+            const referrals = userData.referrals || [];
+
+            // Update stats
+            teamCount.textContent = referrals.length;
+            const totalReferralBonus = userData.referralBonus || 0;
+            const totalTeamEarning = userData.teamEarning || 0;
+            referralBonusDisplay.textContent = `${totalReferralBonus} 💎`;
+            teamEarningDisplay.textContent = `${totalTeamEarning} 💎`;
+            teamTotalEarned.textContent = `${totalReferralBonus + totalTeamEarning} 💎`;
+
+            // Calculate team total for 5% display
+            let teamTotal = 0;
+            for (const refId of referrals) {
+                try {
+                    const refDoc = await db.collection('users').doc(refId).get();
+                    if (refDoc.exists) {
+                        const refData = refDoc.data();
+                        teamTotal += (refData.totalDiamonds || 0) + (refData.referralBonus || 0) + (refData.teamEarning ||
+                        0);
+                    }
+                } catch (e) {}
+            }
+            const fivePercent = Math.round(teamTotal * 0.05);
+            teamEarningDetail.textContent = `5% of team total (${teamTotal.toLocaleString()} 💎) = ${fivePercent.toLocaleString()} 💎`;
+
+            if (referrals.length === 0) {
+                teamMembersList.innerHTML = '<div class="team-empty">No team members yet. Share your link!</div>';
+                return;
+            }
+
+            let html = '';
+            for (const refId of referrals) {
+                try {
+                    const refDoc = await db.collection('users').doc(refId).get();
+                    if (refDoc.exists) {
+                        const refData = refDoc.data();
+                        const email = refData.email || 'Unknown';
+                        const lastLogin = refData.lastLogin || null;
+                        const isActive = lastLogin ? (new Date() - new Date(lastLogin)) < (24 * 60 * 60 * 1000) : false;
+                        const earned = refData.totalDiamonds || 0;
+
+                        html += `
+                                <div class="team-member">
+                                    <span class="t-email">${email}</span>
+                                    <span class="t-status ${isActive ? 'active' : 'inactive'}">
+                                        ${isActive ? '✅ Active' : '🔴 Inactive'}
+                                    </span>
+                                    <span class="t-earned">${earned} 💎</span>
+                                </div>
+                            `;
+                    }
+                } catch (e) {
+                    console.error('Error loading team member:', e);
+                }
+            }
+
+            if (!html) {
+                html = '<div class="team-empty">No team members found</div>';
+            }
+            teamMembersList.innerHTML = html;
+        }
+
+        // ============================================================
+        // WITHDRAW TICKER (MARQUEE)
+        // ============================================================
+        const WITHDRAW_TICKER_DATA = [
+            { name: "Husnain", amount: 13000 },
+            { name: "Ahmed", amount: 15500 },
+            { name: "Ali", amount: 12500 },
+            { name: "Sara", amount: 18000 },
+            { name: "Zain", amount: 14200 },
+            { name: "Fatima", amount: 16000 },
+            { name: "Omar", amount: 22000 },
+            { name: "Ayesha", amount: 19800 },
+            { name: "Bilal", amount: 21000 },
+            { name: "Hira", amount: 17500 },
+            { name: "Usman", amount: 16500 },
+            { name: "Nadia", amount: 19000 }
+        ];
+
+        async function loadWithdrawTicker() {
+            try {
+                // Filter: Only > 12,000 PKR
+                const filtered = WITHDRAW_TICKER_DATA.filter(item => item.amount > 12000);
+                // Shuffle
+                const shuffled = filtered.sort(() => Math.random() - .5);
+
+                if (shuffled.length === 0) {
+                    tickerContent.innerHTML =
+                    '<span class="ticker-item"><i class="fas fa-trophy trophy"></i>No withdrawals yet</span>';
+                    return;
+                }
+
+                let html = '';
+                shuffled.forEach(item => {
+                    html += `
+                            <span class="ticker-item">
+                                <i class="fas fa-trophy trophy"></i>
+                                <span class="name">${item.name}</span>
+                                withdrew 
+                                <span class="amount">${item.amount.toLocaleString()}</span>
+                                <span class="currency">PKR</span>
+                            </span>
+                        `;
+                });
+
+                // Duplicate for seamless scrolling
+                tickerContent.innerHTML = html + html;
+
+            } catch (error) {
+                console.error('Ticker error:', error);
+                tickerContent.innerHTML =
+                    '<span class="ticker-item"><i class="fas fa-trophy trophy"></i>Loading withdrawals...</span>';
+            }
+        }
 
         // ============================================================
         // SAVE ACCOUNT INFO
@@ -3324,7 +4110,7 @@
         });
 
         // ============================================================
-        // WITHDRAW FUNCTIONALITY
+        // WITHDRAW FUNCTIONALITY (With 15,000 Minimum)
         // ============================================================
         withdrawBtn.addEventListener('click', async function() {
             if (!currentUser) {
@@ -3333,9 +4119,13 @@
             }
 
             if (this.disabled) {
-                showCustomPopup('warning', 'Cannot Withdraw',
-                    `You need to watch ${ADS_NEEDED_FOR_WITHDRAW} ad before you can withdraw.\nCurrent: ${userData?.totalAdsWatched || 0} ads`,
-                    'OK');
+                const totalDiamonds = (userData?.totalDiamonds || 0) + (userData?.referralBonus || 0) + (userData
+                    ?.teamEarning || 0);
+                if (totalDiamonds < MIN_WITHDRAW_LIMIT) {
+                    showCustomPopup('warning', 'Minimum Withdraw Limit',
+                        `You need ${MIN_WITHDRAW_LIMIT.toLocaleString()} diamonds to withdraw.\nCurrent balance: ${totalDiamonds.toLocaleString()} 💎`,
+                        'OK');
+                }
                 return;
             }
 
@@ -3344,7 +4134,8 @@
             const method = withdrawMethod.value;
             const account = withdrawAccount.value.trim();
             const amount = parseInt(withdrawAmountInput.value) || 0;
-            const totalDiamonds = userData?.totalDiamonds || 0;
+            const totalDiamonds = (userData?.totalDiamonds || 0) + (userData?.referralBonus || 0) + (userData?.teamEarning ||
+            0);
 
             if (!name) {
                 withdrawName.classList.add('error');
@@ -3366,15 +4157,18 @@
                 showCustomPopup('warning', 'Missing Information', 'Please enter your account number.', 'OK');
                 return;
             }
-            if (amount < 1) {
+            if (amount < MIN_WITHDRAW_LIMIT) {
                 withdrawAmountInput.classList.add('error');
-                showCustomPopup('warning', 'Invalid Amount', 'Please enter at least 1 diamond to withdraw.', 'OK');
+                showCustomPopup('warning', 'Invalid Amount',
+                    `Minimum withdrawal amount is ${MIN_WITHDRAW_LIMIT.toLocaleString()} diamonds.`,
+                    'OK');
                 return;
             }
             if (amount > totalDiamonds) {
                 withdrawAmountInput.classList.add('error');
                 showCustomPopup('warning', 'Insufficient Balance',
-                    `You have ${totalDiamonds} diamonds available.\nPlease enter a valid amount.`, 'OK');
+                    `You have ${totalDiamonds.toLocaleString()} diamonds available.\nPlease enter a valid amount.`,
+                    'OK');
                 return;
             }
 
@@ -3402,11 +4196,42 @@
                     withdrawals: firebase.firestore.FieldValue.arrayUnion(withdrawalData)
                 });
 
+                // Deduct from totalDiamonds (main balance)
+                const mainBalance = userData.totalDiamonds || 0;
+                const referralBonus = userData.referralBonus || 0;
+                const teamEarning = userData.teamEarning || 0;
+
+                // Deduct from main balance first, then referral, then team
+                let remainingAmount = amount;
+                let newMainBalance = mainBalance;
+                let newReferralBonus = referralBonus;
+                let newTeamEarning = teamEarning;
+
+                if (remainingAmount > 0 && newMainBalance > 0) {
+                    const deduct = Math.min(remainingAmount, newMainBalance);
+                    newMainBalance -= deduct;
+                    remainingAmount -= deduct;
+                }
+                if (remainingAmount > 0 && newReferralBonus > 0) {
+                    const deduct = Math.min(remainingAmount, newReferralBonus);
+                    newReferralBonus -= deduct;
+                    remainingAmount -= deduct;
+                }
+                if (remainingAmount > 0 && newTeamEarning > 0) {
+                    const deduct = Math.min(remainingAmount, newTeamEarning);
+                    newTeamEarning -= deduct;
+                    remainingAmount -= deduct;
+                }
+
                 await userDocRef.update({
-                    totalDiamonds: totalDiamonds - amount
+                    totalDiamonds: newMainBalance,
+                    referralBonus: newReferralBonus,
+                    teamEarning: newTeamEarning
                 });
 
-                userData.totalDiamonds = totalDiamonds - amount;
+                userData.totalDiamonds = newMainBalance;
+                userData.referralBonus = newReferralBonus;
+                userData.teamEarning = newTeamEarning;
                 if (!userData.withdrawals) userData.withdrawals = [];
                 userData.withdrawals.push(withdrawalData);
 
@@ -3418,7 +4243,7 @@
                 this.innerHTML = '<i class="fas fa-hand-holding-usd"></i> Request Withdrawal';
 
                 showCustomPopup('success', '✅ Withdrawal Requested!',
-                    `Your withdrawal request of ${amount} diamonds has been submitted.\nYou will receive payment within 24 hours.`,
+                    `Your withdrawal request of ${amount.toLocaleString()} diamonds has been submitted.\nYou will receive payment within 24 hours.`,
                     'OK');
 
                 withdrawAmountInput.value = '';
@@ -3454,7 +4279,7 @@
                     rank++;
                     const data = doc.data();
                     const name = data.displayName || 'User';
-                    const diamonds = data.totalDiamonds || 0;
+                    const diamonds = (data.totalDiamonds || 0) + (data.referralBonus || 0) + (data.teamEarning || 0);
                     const ads = data.totalAdsWatched || 0;
 
                     let rankClass = '';
@@ -3501,19 +4326,100 @@
         });
 
         // ============================================================
+        // CHECK REFERRAL ON PAGE LOAD
+        // ============================================================
+        function checkReferralOnLoad() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const referrerId = urlParams.get('ref');
+
+            if (referrerId && referrerId.length > 0) {
+                sessionStorage.setItem('referrerId', referrerId);
+                console.log('📌 Referrer detected:', referrerId);
+            }
+        }
+        checkReferralOnLoad();
+
+        // ============================================================
+        // GIVE REFERRAL BONUS (50 💰 ONE TIME)
+        // ============================================================
+        async function giveReferrerBonus(referrerId, referredId) {
+            try {
+                // Check if already awarded
+                const checkSnapshot = await db.collection('referralBonuses')
+                    .where('referrerId', '==', referrerId)
+                    .where('referredId', '==', referredId)
+                    .get();
+
+                if (!checkSnapshot.empty) {
+                    console.log('⚠️ Bonus already awarded for this referral');
+                    return false;
+                }
+
+                // Get referrer data
+                const referrerRef = db.collection('users').doc(referrerId);
+                const referrerDoc = await referrerRef.get();
+
+                if (!referrerDoc.exists) {
+                    console.log('❌ Referrer not found');
+                    return false;
+                }
+
+                const referrerData = referrerDoc.data();
+                const currentReferralBonus = referrerData.referralBonus || 0;
+                const currentReferrals = referrerData.referrals || [];
+
+                // Check if already referred this user
+                if (currentReferrals.includes(referredId)) {
+                    console.log('⚠️ Already referred this user');
+                    return false;
+                }
+
+                // Award 50 points to referrer
+                await referrerRef.update({
+                    referralBonus: currentReferralBonus + REFERRER_BONUS,
+                    referrals: [...currentReferrals, referredId],
+                    referralCount: (referrerData.referralCount || 0) + 1
+                });
+
+                // Log the bonus
+                await db.collection('referralBonuses').add({
+                    referrerId: referrerId,
+                    referredId: referredId,
+                    amount: REFERRER_BONUS,
+                    type: 'referral_bonus',
+                    createdAt: new Date().toISOString(),
+                    status: 'completed'
+                });
+
+                console.log(`✅ +${REFERRER_BONUS} diamonds awarded to ${referrerId} for referring ${referredId}`);
+                return true;
+
+            } catch (error) {
+                console.error('❌ Referrer bonus error:', error);
+                return false;
+            }
+        }
+
+        // ============================================================
         // INITIAL LOAD
         // ============================================================
         loadLeaderboard();
+        loadWithdrawTicker();
 
         if (auth.currentUser) {
             initializeUserData(auth.currentUser);
         }
 
-        console.log('Watch & Earn page loaded successfully!');
-        console.log('Admin email: learnwithhusnain0@gmail.com');
-        console.log('✅ Bottom Navigation: Home | Withdraw');
-        console.log('Ad watch time: 10 seconds (with resume support)');
-        console.log('Withdraw enabled after: 1 ad');
+        console.log('✅ Watch & Earn page loaded successfully!');
+        console.log('📌 Admin email: learnwithhusnain0@gmail.com');
+        console.log('📌 Bottom Navigation: Home | Team | Withdraw');
+        console.log('📌 Ad watch time: 10 seconds (with resume support)');
+        console.log('📌 Session: 20 ads, 30 min cooldown');
+        console.log('📌 Withdraw: Minimum 15,000 💎');
+        console.log('📌 Referral: 1000 💎 to new user, 50 💎 to referrer (ONE TIME)');
+        console.log('📌 Device: 1 account per device');
+        console.log('📌 Ticker: Showing withdrawals > 12,000 PKR');
+        console.log('📌 Progress Ring: Removed');
     </script>
 
 </body>
