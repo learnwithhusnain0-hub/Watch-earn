@@ -34,6 +34,7 @@
     </script>
 
     <style>
+        /* All styles remain same - no changes needed */
         * {
             margin: 0;
             padding: 0;
@@ -1765,7 +1766,6 @@
                     return;
                 }
 
-                // ✅ Store fresh data
                 selectedUserData = doc.data();
                 const total = (selectedUserData.totalDiamonds || 0) +
                     (selectedUserData.referralBonus || 0) +
@@ -1791,12 +1791,11 @@
         // ============================================================
         function closeDiamondPopup() {
             document.getElementById('diamondPopup').classList.remove('active');
-            selectedUserId = null;
-            selectedUserData = null;
+            // ✅ IMPORTANT: Don't reset selectedUserId and pendingAction here
         }
 
         // ============================================================
-        // ✅ FIXED: CONFIRM ADD DIAMONDS - Pehly confirmation popup
+        // ✅ FIXED: CONFIRM ADD DIAMONDS
         // ============================================================
         function confirmAddDiamonds() {
             const amount = parseInt(document.getElementById('diamondAmount').value);
@@ -1808,16 +1807,13 @@
             pendingAmount = amount;
             pendingAction = 'add';
             
-            // ✅ Pehly confirmation popup
             showConfirmPopup(
                 `Add ${amount.toLocaleString()} diamonds?`,
                 `This will add ${amount.toLocaleString()} diamonds to ${selectedUserData.displayName || 'User'}'s account.`,
                 function() {
-                    // ✅ Confirm ke baad action execute ho
                     executeAction();
                 },
                 function() {
-                    // Cancel
                     pendingAction = null;
                     pendingAmount = 0;
                 }
@@ -1825,7 +1821,7 @@
         }
 
         // ============================================================
-        // ✅ FIXED: CONFIRM REMOVE DIAMONDS - Pehly confirmation popup
+        // ✅ FIXED: CONFIRM REMOVE DIAMONDS
         // ============================================================
         function confirmRemoveDiamonds() {
             const amount = parseInt(document.getElementById('diamondAmount').value);
@@ -1847,16 +1843,13 @@
             pendingAmount = amount;
             pendingAction = 'remove';
             
-            // ✅ Pehly confirmation popup
             showConfirmPopup(
                 `Remove ${amount.toLocaleString()} diamonds?`,
                 `This will remove ${amount.toLocaleString()} diamonds from ${selectedUserData.displayName || 'User'}'s account.`,
                 function() {
-                    // ✅ Confirm ke baad action execute ho
                     executeAction();
                 },
                 function() {
-                    // Cancel
                     pendingAction = null;
                     pendingAmount = 0;
                 }
@@ -1864,7 +1857,7 @@
         }
 
         // ============================================================
-        // ✅ FIXED: CONFIRM SET BALANCE - Pehly confirmation popup
+        // ✅ FIXED: CONFIRM SET BALANCE
         // ============================================================
         function confirmSetBalance() {
             const amount = parseInt(document.getElementById('diamondAmount').value);
@@ -1876,16 +1869,13 @@
             pendingAmount = amount;
             pendingAction = 'set';
             
-            // ✅ Pehly confirmation popup
             showConfirmPopup(
                 `Set balance to ${amount.toLocaleString()} diamonds?`,
                 `This will set ${selectedUserData.displayName || 'User'}'s balance to ${amount.toLocaleString()} diamonds.`,
                 function() {
-                    // ✅ Confirm ke baad action execute ho
                     executeAction();
                 },
                 function() {
-                    // Cancel
                     pendingAction = null;
                     pendingAmount = 0;
                 }
@@ -1893,7 +1883,7 @@
         }
 
         // ============================================================
-        // ✅ FIXED: SHOW CONFIRM POPUP (Simple - no callback issues)
+        // ✅ FIXED: SHOW CONFIRM POPUP
         // ============================================================
         function showConfirmPopup(title, message, onConfirm, onCancel) {
             const popup = document.getElementById('customPopup');
@@ -1917,7 +1907,6 @@
             const newConfirmBtn = document.getElementById('popupConfirmBtn');
             const cancelBtn = document.getElementById('popupCancelBtn');
 
-            // ✅ Remove old listeners to avoid duplicates
             const handleConfirm = function() {
                 popup.classList.remove('active');
                 actions.innerHTML = `<button class="btn-primary" id="popupConfirmBtn">OK</button>`;
@@ -1944,36 +1933,40 @@
         }
 
         // ============================================================
-        // ✅ FIXED: EXECUTE ACTION - Fresh data fetch
+        // ✅ FIXED: EXECUTE ACTION
         // ============================================================
         async function executeAction() {
-            if (!selectedUserId || !pendingAction) {
-                showToast('Missing user or action', 'error');
+            // ✅ IMPORTANT: Use the stored values, don't reset them
+            const userId = selectedUserId;
+            const action = pendingAction;
+            const amount = pendingAmount;
+
+            if (!userId || !action) {
+                showToast('Missing user or action. Please try again.', 'error');
                 return;
             }
 
             try {
-                console.log('🔵 Processing action:', pendingAction, 'Amount:', pendingAmount, 'User:', selectedUserId);
+                console.log('🔵 Processing action:', action, 'Amount:', amount, 'User:', userId);
 
-                // ✅ CRITICAL FIX: Always fetch fresh data
-                const freshDoc = await db.collection('users').doc(selectedUserId).get();
+                const freshDoc = await db.collection('users').doc(userId).get();
                 if (!freshDoc.exists) {
                     showToast('User not found', 'error');
                     return;
                 }
 
                 const freshData = freshDoc.data();
-                const userRef = db.collection('users').doc(selectedUserId);
+                const userRef = db.collection('users').doc(userId);
                 let updateData = {};
                 let message = '';
 
-                if (pendingAction === 'add') {
-                    updateData.totalDiamonds = firebase.firestore.FieldValue.increment(pendingAmount);
-                    message = `✅ ${pendingAmount.toLocaleString()} diamonds added!`;
-                    console.log('📌 Adding', pendingAmount, 'to totalDiamonds');
+                if (action === 'add') {
+                    updateData.totalDiamonds = firebase.firestore.FieldValue.increment(amount);
+                    message = `✅ ${amount.toLocaleString()} diamonds added!`;
+                    console.log('📌 Adding', amount, 'to totalDiamonds');
 
-                } else if (pendingAction === 'remove') {
-                    let remaining = pendingAmount;
+                } else if (action === 'remove') {
+                    let remaining = amount;
                     let mainBalance = freshData.totalDiamonds || 0;
                     let referralBonus = freshData.referralBonus || 0;
                     let teamEarning = freshData.teamEarning || 0;
@@ -1997,25 +1990,25 @@
                     updateData.totalDiamonds = mainBalance;
                     updateData.referralBonus = referralBonus;
                     updateData.teamEarning = teamEarning;
-                    message = `✅ ${pendingAmount.toLocaleString()} diamonds removed!`;
-                    console.log('📌 Removing', pendingAmount, 'from balance');
+                    message = `✅ ${amount.toLocaleString()} diamonds removed!`;
+                    console.log('📌 Removing', amount, 'from balance');
 
-                } else if (pendingAction === 'set') {
+                } else if (action === 'set') {
                     const currentTotal = (freshData.totalDiamonds || 0) +
                         (freshData.referralBonus || 0) +
                         (freshData.teamEarning || 0);
 
-                    if (pendingAmount > currentTotal) {
-                        const diff = pendingAmount - currentTotal;
+                    if (amount > currentTotal) {
+                        const diff = amount - currentTotal;
                         updateData.totalDiamonds = firebase.firestore.FieldValue.increment(diff);
-                    } else if (pendingAmount < currentTotal) {
-                        const diff = currentTotal - pendingAmount;
+                    } else if (amount < currentTotal) {
+                        const diff = currentTotal - amount;
                         let mainBalance = freshData.totalDiamonds || 0;
                         let newMain = Math.max(0, mainBalance - diff);
                         updateData.totalDiamonds = newMain;
                     }
-                    message = `✅ Balance set to ${pendingAmount.toLocaleString()} diamonds!`;
-                    console.log('📌 Setting balance to', pendingAmount);
+                    message = `✅ Balance set to ${amount.toLocaleString()} diamonds!`;
+                    console.log('📌 Setting balance to', amount);
                 }
 
                 if (Object.keys(updateData).length > 0) {
@@ -2026,7 +2019,12 @@
                     showToast('No changes made', 'info');
                 }
 
-                // ✅ Refresh all data
+                // ✅ Reset pending values after successful execution
+                pendingAction = null;
+                pendingAmount = 0;
+                selectedUserId = null;
+                selectedUserData = null;
+
                 setTimeout(() => {
                     loadAllUsers();
                     loadStats();
@@ -2036,12 +2034,10 @@
 
             } catch (error) {
                 console.error('❌ Action error:', error);
-                console.error('❌ Error details:', error.message, error.code);
                 showToast(`❌ Error: ${error.message}`, 'error');
+                pendingAction = null;
+                pendingAmount = 0;
             }
-
-            pendingAction = null;
-            pendingAmount = 0;
         }
 
         // ============================================================
