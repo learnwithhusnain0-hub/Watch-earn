@@ -3529,7 +3529,7 @@
 
                 if (sessionAdsCount < SESSION_AD_LIMIT && !isWatching && !isRedirecting && !isPaused) {
                     watchAdBtn.disabled = false;
-                    watchAdBtn.textContent = '<i class="fas fa-external-link-alt"></i> Watch Ad';
+                    watchAdBtn.innerHTML = '<i class="fas fa-external-link-alt"></i> Watch Ad';
                     watchAdBtn.classList.remove('redirecting', 'continue-btn');
                 } else if (sessionAdsCount >= SESSION_AD_LIMIT) {
                     startCooldown();
