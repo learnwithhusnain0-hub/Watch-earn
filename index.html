@@ -3387,6 +3387,11 @@
                     await checkRejectedWithdrawals();
                 }
 
+                // ✅ FIX: Ledger collections (referralBonuses / teamEarnings) se
+                // apna khud ka total nikal kar apne hi doc mein sync karo.
+                // Ye write hamesha allow hogi kyunke ye apna khud ka document hai.
+                await syncReferrerEarnings(user.uid);
+
                 // Update last login
                 await userDocRef.update({
                     lastLogin: new Date().toISOString()
@@ -4093,6 +4098,9 @@
                 return;
             }
 
+            // ✅ FIX: Team tab khulte waqt fresh ledger se totals sync karo
+            await syncReferrerEarnings(currentUser.uid);
+
             const referrals = userData.referrals || [];
 
             teamCount.textContent = referrals.length;
@@ -4475,13 +4483,79 @@
         checkReferralOnLoad();
 
         // ============================================================
+        // SYNC REFERRER EARNINGS (ledger -> apna khud ka doc)
+        // ✅ NEW: Ledger collections (referralBonuses + teamEarnings) ko
+        // referrerId se query karke total nikalte hain, phir apna khud ka
+        // document update karte hain (owner write - hamesha allowed hai).
+        // Isay login/team-tab open hone par call karo taake totals taaza rahein.
+        // ============================================================
+        async function syncReferrerEarnings(uid) {
+            try {
+                const [referralSnap, teamSnap] = await Promise.all([
+                    db.collection('referralBonuses').where('referrerId', '==', uid).get(),
+                    db.collection('teamEarnings').where('referrerId', '==', uid).get()
+                ]);
+
+                let totalReferralBonus = 0;
+                const referredIds = new Set();
+                referralSnap.forEach(doc => {
+                    const d = doc.data();
+                    totalReferralBonus += d.amount || 0;
+                    if (d.referredId) referredIds.add(d.referredId);
+                });
+
+                let totalTeamEarning = 0;
+                teamSnap.forEach(doc => {
+                    totalTeamEarning += doc.data().amount || 0;
+                    const d = doc.data();
+                    if (d.referredId) referredIds.add(d.referredId);
+                });
+
+                const referralsArray = Array.from(referredIds);
+
+                if (!userData) return;
+
+                // Sirf tab likho jab kuch waqai change hua ho (extra writes bachane ke liye)
+                const needsUpdate =
+                    (userData.referralBonus || 0) !== totalReferralBonus ||
+                    (userData.teamEarning || 0) !== totalTeamEarning ||
+                    (userData.referralCount || 0) !== referralsArray.length;
+
+                if (needsUpdate && userDocRef) {
+                    await userDocRef.update({
+                        referralBonus: totalReferralBonus,
+                        teamEarning: totalTeamEarning,
+                        referrals: referralsArray,
+                        referralCount: referralsArray.length
+                    });
+                    userData.referralBonus = totalReferralBonus;
+                    userData.teamEarning = totalTeamEarning;
+                    userData.referrals = referralsArray;
+                    userData.referralCount = referralsArray.length;
+                    console.log(`✅ Earnings synced: referralBonus=${totalReferralBonus}, teamEarning=${totalTeamEarning}, referrals=${referralsArray.length}`);
+                }
+
+            } catch (error) {
+                console.error('❌ syncReferrerEarnings error:', error);
+            }
+        }
+
+        // ============================================================
         // TEAM EARNING BONUS: Har 1000 diamonds pe referrer ko 50 diamonds
+        // ✅ FIX: Referrer ke doc ko directly update NAHI karte (Firestore rules
+        // sirf owner ko apna doc likhne dete hain). Is liye sirf ek immutable
+        // LEDGER entry banate hain 'teamEarnings' collection mein. Doc ID mein
+        // milestone number hone ki wajah se duplicate/replay automatically
+        // block ho jata hai. Referrer apne login pe syncReferrerEarnings() se
+        // apna total khud calculate kar leta hai.
         // ============================================================
         async function giveTeamEarningBonus(currentUserTotalDiamonds) {
             try {
                 if (!userData || !userData.referredBy) return; // Koi referrer nahi
+                if (!currentUser) return;
 
                 const referrerId = userData.referredBy;
+                const myUid = currentUser.uid;
 
                 // Check: kaunse 1000 milestone pe hain hum
                 const currentMilestone = Math.floor(currentUserTotalDiamonds / 1000);
@@ -4490,23 +4564,25 @@
                 // Sirf tab bonus do jab naya 1000 milestone cross hua ho
                 if (currentMilestone <= previousMilestone || currentMilestone === 0) return;
 
-                // Kitne naye milestones cross hue (usually 1)
-                const newMilestones = currentMilestone - previousMilestone;
-                const bonusToGive = newMilestones * REFERRER_BONUS; // 50 per 1000
-
-                const referrerRef = db.collection('users').doc(referrerId);
-                const referrerDoc = await referrerRef.get();
-
-                if (!referrerDoc.exists) return;
-
-                const referrerData = referrerDoc.data();
-                const currentTeamEarning = referrerData.teamEarning || 0;
-
-                await referrerRef.update({
-                    teamEarning: currentTeamEarning + bonusToGive
-                });
-
-                console.log(`✅ +${bonusToGive} 💎 team bonus given to ${referrerId} (User reached ${currentUserTotalDiamonds} diamonds)`);
+                // Har naye milestone ke liye alag ledger entry (usually 1, par agar
+                // skip hua ho to loop se sab cover ho jate hain)
+                for (let m = previousMilestone + 1; m <= currentMilestone; m++) {
+                    const ledgerRef = db.collection('teamEarnings').doc(`${myUid}_${m}`);
+                    try {
+                        await ledgerRef.set({
+                            referrerId: referrerId,
+                            referredId: myUid,
+                            milestone: m,
+                            amount: REFERRER_BONUS, // 50 per 1000
+                            type: 'team_earning',
+                            createdAt: new Date().toISOString()
+                        });
+                        console.log(`✅ Team earning ledger entry created: +${REFERRER_BONUS} 💎 for ${referrerId} (milestone ${m})`);
+                    } catch (e) {
+                        // Doc already exists (duplicate call) -> rules will reject as "update", safe to ignore
+                        console.log(`⚠️ Milestone ${m} ledger entry already exists, skipping`);
+                    }
+                }
 
             } catch (error) {
                 console.error('❌ Team earning bonus error:', error);
@@ -4515,53 +4591,29 @@
 
         // ============================================================
         // GIVE REFERRAL BONUS
+        // ✅ FIX: Referrer ke doc ko directly update NAHI karte - Firestore
+        // rules sirf owner ko apna doc likhne dete hain, is liye ye cross-user
+        // update hamesha permission-denied ho kar silently fail ho raha tha.
+        // Ab hum sirf apna khud ka ek LEDGER record banate hain jiski doc-ID
+        // hamesha apna (referredId) UID hoti hai - isse duplicate bonus bhi
+        // khud-ba-khud rok jata hai (doosri baar set() karna "update" treat
+        // hoga, jo rules block kar dengi). Referrer apne login pe
+        // syncReferrerEarnings() se apna total khud parh kar sync kar lega.
         // ============================================================
         async function giveReferrerBonus(referrerId, referredId) {
             try {
-                const checkSnapshot = await db.collection('referralBonuses')
-                    .where('referrerId', '==', referrerId)
-                    .where('referredId', '==', referredId)
-                    .get();
+                const ledgerRef = db.collection('referralBonuses').doc(referredId);
 
-                if (!checkSnapshot.empty) {
-                    console.log('⚠️ Bonus already awarded for this referral');
-                    return false;
-                }
-
-                const referrerRef = db.collection('users').doc(referrerId);
-                const referrerDoc = await referrerRef.get();
-
-                if (!referrerDoc.exists) {
-                    console.log('❌ Referrer not found');
-                    return false;
-                }
-
-                const referrerData = referrerDoc.data();
-                const currentReferralBonus = referrerData.referralBonus || 0;
-                const currentReferrals = referrerData.referrals || [];
-
-                if (currentReferrals.includes(referredId)) {
-                    console.log('⚠️ Already referred this user');
-                    return false;
-                }
-
-                // Referrer ko 1000 diamonds milein invite karne pe
-                await referrerRef.update({
-                    referralBonus: currentReferralBonus + REFERRAL_BONUS,
-                    referrals: [...currentReferrals, referredId],
-                    referralCount: (referrerData.referralCount || 0) + 1
-                });
-
-                await db.collection('referralBonuses').add({
+                await ledgerRef.set({
                     referrerId: referrerId,
                     referredId: referredId,
-                    amount: REFERRER_BONUS,
+                    amount: REFERRAL_BONUS, // 1000 - referrer ko ek baar milta hai
                     type: 'referral_bonus',
                     createdAt: new Date().toISOString(),
                     status: 'completed'
                 });
 
-                console.log(`✅ +${REFERRER_BONUS} diamonds awarded to ${referrerId} for referring ${referredId}`);
+                console.log(`✅ Referral bonus ledger entry created: ${referrerId} will get +${REFERRAL_BONUS} 💎 for referring ${referredId}`);
                 return true;
 
             } catch (error) {
