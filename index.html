@@ -3387,6 +3387,9 @@
                     await checkRejectedWithdrawals();
                 }
 
+                // ✅ FIX: Login pe ledger se apna total sync karein
+                await syncReferrerEarnings(user.uid);
+
                 // ✅ FIX: Ledger collections (referralBonuses / teamEarnings) se
                 // apna khud ka total nikal kar apne hi doc mein sync karo.
                 // Ye write hamesha allow hogi kyunke ye apna khud ka document hai.
