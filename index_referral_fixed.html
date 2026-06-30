@@ -2911,23 +2911,27 @@
         }
 
         // ============================================================
-        // LOGIN POPUP (With Device Lock)
-        // ============================================================
-        let loginPopupShown = false;
+        // ===========================================
+// LOGIN POPUP (With Device Lock)
+// ===========================================
+let loginPopupShown = false;
 
-        function showLoginPopup() {
-            if (loginPopupShown) return;
-            loginPopupShown = true;
+function showLoginPopup() {
+    if (loginPopupShown) return;
+    loginPopupShown = true;
 
-            const existing = document.querySelector('.login-overlay');
-            if (existing) existing.remove();
+    const existing = document.querySelector('.login-overlay');
+    if (existing) existing.remove();
 
-            const registeredEmail = getRegisteredEmail();
-            const isLocked = isDeviceLocked();
+    const registeredEmail = getRegisteredEmail();
+    const isLocked = isDeviceLocked();
 
-            // ✅ Agar referral link se aaye hain, toh referrer ka code dikhayein (locked)
-            const referrerCode = sessionStorage.getItem('referrerCode');
+    // ✅ YEH LINE CHANGE KARO:
+    const referrerCode = new URLSearchParams(window.location.search).get('ref') || sessionStorage.getItem('referrerCode');
 
+    // ... baqi code (tumhara original HTML wala code)
+}
+      
             const overlayDiv = document.createElement('div');
             overlayDiv.className = 'login-overlay';
             overlayDiv.id = 'loginOverlay';
