@@ -2925,6 +2925,9 @@
             const registeredEmail = getRegisteredEmail();
             const isLocked = isDeviceLocked();
 
+            // ✅ Agar referral link se aaye hain, toh referrer ka code dikhayein (locked)
+            const referrerCode = sessionStorage.getItem('referrerCode');
+
             const overlayDiv = document.createElement('div');
             overlayDiv.className = 'login-overlay';
             overlayDiv.id = 'loginOverlay';
@@ -2935,6 +2938,14 @@
                         <img class="logo-img" src="https://i.ibb.co/ds4SFQsf/IMG-20260615-WA0025-1.webp" alt="Logo" />
                         <h2>🔐 Sign In</h2>
                         <p class="sub-text">Sign in to start earning diamonds</p>
+
+                        ${referrerCode ? `
+                        <div class="device-info" style="border-color:#4CAF50;">
+                            <i class="fas fa-user-friends" style="color:#4CAF50;"></i>
+                            Referred by code: <strong style="color:#FFD700;">${referrerCode}</strong>
+                            <br><small style="color:#666;">You'll be linked to this referrer automatically</small>
+                        </div>
+                        ` : ''}
                         
                         ${isLocked ? `
                         <div class="device-info">
@@ -3260,11 +3271,6 @@
                 initializeUserData(user);
                 checkVPNStatus();
 
-                // Update referral link
-                if (referralLinkInput) {
-                    referralLinkInput.value = getReferralLink(user.uid);
-                }
-
                 // Load team data if team tab is active
                 if (currentTab === 'team') {
                     loadTeamData();
@@ -3340,6 +3346,9 @@
                 const doc = await userDocRef.get();
 
                 if (!doc.exists) {
+                    // ✅ Har naye user ke liye unique 6-digit referral code generate karo
+                    const myReferralCode = await generateUniqueReferralCode();
+
                     const newUserData = {
                         email: user.email,
                         displayName: user.displayName || 'User',
@@ -3359,6 +3368,7 @@
                         referralBonus: 0,
                         teamEarning: 0,
                         referredBy: null,
+                        referralCode: myReferralCode,
                         rank: 0
                     };
                     await userDocRef.set(newUserData);
@@ -3393,6 +3403,13 @@
                     if (!userData.referralBonus) userData.referralBonus = 0;
                     if (!userData.teamEarning) userData.teamEarning = 0;
                     if (!userData.referredBy) userData.referredBy = null;
+
+                    // ✅ Purane users jinke paas referralCode nahi hai unke liye generate karo
+                    if (!userData.referralCode) {
+                        const myReferralCode = await generateUniqueReferralCode();
+                        userData.referralCode = myReferralCode;
+                        await userDocRef.update({ referralCode: myReferralCode });
+                    }
 
                     await checkRejectedWithdrawals();
                 }
@@ -3429,8 +3446,10 @@
                 updateWithdrawStatus();
                 updateHistory();
 
-                // Update referral link
-                referralLinkInput.value = getReferralLink(user.uid);
+                // Update referral link (6-digit numeric code)
+                if (referralLinkInput) {
+                    referralLinkInput.value = getReferralLink(userData.referralCode);
+                }
 
             } catch (error) {
                 console.error('Error initializing user data:', error);
@@ -4052,9 +4071,51 @@
         // ============================================================
         // REFERRAL FUNCTIONS
         // ============================================================
-        function getReferralLink(userId) {
+
+        // ✅ Har user ke liye unique 6-digit numeric referral code generate karta hai
+        function generateRandom6Digit() {
+            return Math.floor(100000 + Math.random() * 900000).toString(); // 100000-999999
+        }
+
+        async function generateUniqueReferralCode() {
+            let code;
+            let isUnique = false;
+            let attempts = 0;
+
+            while (!isUnique && attempts < 10) {
+                code = generateRandom6Digit();
+                const existing = await db.collection('users')
+                    .where('referralCode', '==', code)
+                    .limit(1)
+                    .get();
+                if (existing.empty) {
+                    isUnique = true;
+                }
+                attempts++;
+            }
+            return code;
+        }
+
+        // ✅ Referral code (6-digit) se actual Firebase uid dhoondta hai
+        async function getUidFromReferralCode(code) {
+            try {
+                const snapshot = await db.collection('users')
+                    .where('referralCode', '==', code)
+                    .limit(1)
+                    .get();
+                if (!snapshot.empty) {
+                    return snapshot.docs[0].id;
+                }
+                return null;
+            } catch (error) {
+                console.error('❌ getUidFromReferralCode error:', error);
+                return null;
+            }
+        }
+
+        function getReferralLink(referralCode) {
             const baseUrl = window.location.origin + window.location.pathname;
-            return `${baseUrl}?ref=${userId}`;
+            return `${baseUrl}?ref=${referralCode}`;
         }
 
         function copyReferralLink() {
@@ -4484,13 +4545,21 @@
         // ============================================================
         // CHECK REFERRAL ON PAGE LOAD
         // ============================================================
-        function checkReferralOnLoad() {
+        // ✅ Ab link mein 6-digit referralCode hota hai (ref=123456)
+        // Isko actual Firebase uid mein resolve karke session mein lock kar dete hain
+        async function checkReferralOnLoad() {
             const urlParams = new URLSearchParams(window.location.search);
-            const referrerId = urlParams.get('ref');
+            const referralCode = urlParams.get('ref');
 
-            if (referrerId && referrerId.length > 0) {
-                sessionStorage.setItem('referrerId', referrerId);
-                console.log('📌 Referrer detected:', referrerId);
+            if (referralCode && /^\d{6}$/.test(referralCode)) {
+                const referrerUid = await getUidFromReferralCode(referralCode);
+                if (referrerUid) {
+                    sessionStorage.setItem('referrerId', referrerUid);
+                    sessionStorage.setItem('referrerCode', referralCode);
+                    console.log('📌 Referrer detected (code):', referralCode, '-> uid:', referrerUid);
+                } else {
+                    console.log('⚠️ Invalid referral code:', referralCode);
+                }
             }
         }
         checkReferralOnLoad();
