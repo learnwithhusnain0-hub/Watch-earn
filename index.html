@@ -2795,6 +2795,7 @@
         function lockDeviceToEmail(email) {
             localStorage.setItem('deviceRegistered', email);
             localStorage.setItem('deviceRegisteredAt', new Date().toISOString());
+            lockFingerprintToEmail(email); // ✅ Firestore mein bhi permanently save karo (fire-and-forget)
         }
 
         // Check if the current email matches the registered device
@@ -2803,6 +2804,112 @@
             if (!registered) return true; // No device lock yet - anyone can login
             return email.toLowerCase() === registered.toLowerCase();
         }
+
+        // ============================================================
+        // DEVICE FINGERPRINT SYSTEM - localStorage clear hone par bhi
+        // device ko pehchan kar dobara signup rok deta hai (Firestore-backed)
+        // ============================================================
+
+        // Browser/device ka unique fingerprint banata hai (canvas + webgl + navigator info)
+        function generateDeviceFingerprint() {
+            try {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                ctx.textBaseline = 'top';
+                ctx.font = '14px Arial';
+                ctx.fillText('device-fp-check-🔒', 2, 2);
+                const canvasData = canvas.toDataURL();
+
+                let renderer = '';
+                try {
+                    const glCanvas = document.createElement('canvas');
+                    const gl = glCanvas.getContext('webgl') || glCanvas.getContext('experimental-webgl');
+                    if (gl) {
+                        const dbgInfo = gl.getExtension('WEBGL_debug_renderer_info');
+                        if (dbgInfo) {
+                            renderer = gl.getParameter(dbgInfo.UNMASKED_RENDERER_WEBGL) + '' +
+                                gl.getParameter(dbgInfo.UNMASKED_VENDOR_WEBGL);
+                        }
+                    }
+                } catch (e) {}
+
+                const raw = [
+                    navigator.userAgent || '',
+                    navigator.language || '',
+                    navigator.hardwareConcurrency || '',
+                    navigator.platform || '',
+                    (screen.width || '') + 'x' + (screen.height || '') + 'x' + (screen.colorDepth || ''),
+                    (Intl.DateTimeFormat().resolvedOptions().timeZone) || '',
+                    canvasData,
+                    renderer
+                ].join('###');
+
+                // Simple deterministic hash (same device = same hash har baar)
+                let hash = 0;
+                for (let i = 0; i < raw.length; i++) {
+                    hash = ((hash << 5) - hash) + raw.charCodeAt(i);
+                    hash |= 0;
+                }
+                return 'fp_' + Math.abs(hash).toString(36) + '_' + raw.length.toString(36);
+            } catch (e) {
+                // Agar canvas/webgl block ho to bhi ek fallback fingerprint bana do
+                return 'fp_fallback_' + ((navigator.userAgent || '').length + (screen.width || 0) + (screen.height || 0)).toString(36);
+            }
+        }
+
+        const deviceFingerprint = generateDeviceFingerprint();
+
+        // Firestore mein is fingerprint ke against pehle se koi email locked hai?
+        async function checkFingerprintLock() {
+            try {
+                const doc = await db.collection('deviceFingerprints').doc(deviceFingerprint).get();
+                if (doc.exists) {
+                    return (doc.data() && doc.data().email) || null;
+                }
+                return null;
+            } catch (e) {
+                console.error('Fingerprint check failed:', e);
+                return null; // Firestore error/offline -> fail-open, localStorage lock apni jagah kaam karega
+            }
+        }
+
+        // Fingerprint ko email ke sath Firestore mein permanently save karo
+        async function lockFingerprintToEmail(email) {
+            try {
+                await db.collection('deviceFingerprints').doc(deviceFingerprint).set({
+                    email: email.toLowerCase(),
+                    lockedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    userAgent: navigator.userAgent || ''
+                }, { merge: true });
+            } catch (e) {
+                console.error('Fingerprint lock save failed:', e);
+            }
+        }
+
+        // Page load par localStorage lock ko Firestore fingerprint record se sync karo.
+        // Agar user ne localStorage/cache clear kar diya ho lekin fingerprint match ho,
+        // to lock automatically restore ho jayega - naye email se signup nahi ho sakega.
+        async function syncDeviceLockFromFingerprint() {
+            const localLocked = getRegisteredEmail();
+            const fingerprintEmail = await checkFingerprintLock();
+
+            if (!localLocked && fingerprintEmail) {
+                // localStorage clear ho chuka tha, Firestore se lock wapas restore karo
+                localStorage.setItem('deviceRegistered', fingerprintEmail);
+                localStorage.setItem('deviceRegisteredAt', new Date().toISOString());
+                console.log('🔒 Device lock restored from fingerprint (localStorage was cleared)');
+            } else if (localLocked && fingerprintEmail && localLocked.toLowerCase() !== fingerprintEmail.toLowerCase()) {
+                // Mismatch - Firestore ko authoritative maano
+                localStorage.setItem('deviceRegistered', fingerprintEmail);
+                console.log('🔒 Device lock corrected from fingerprint record');
+            } else if (localLocked && !fingerprintEmail) {
+                // Purane users jinka localStorage lock hai lekin Firestore mein fingerprint record nahi - backfill
+                lockFingerprintToEmail(localLocked);
+            }
+        }
+
+        // ✅ Sync ko turant shuru kar do (referralCheckPromise ki tarah await karenge)
+        let deviceLockSyncPromise = syncDeviceLockFromFingerprint();
 
         // ============================================================
         // BOTTOM NAVIGATION - 3 TABS
@@ -2926,6 +3033,11 @@ let loginPopupShown = false;
             // ✅ Referral check complete hone do pehle
             if (typeof referralCheckPromise !== 'undefined') {
                 await referralCheckPromise;
+            }
+
+            // ✅ Fingerprint sync complete hone do (localStorage clear check ke liye)
+            if (typeof deviceLockSyncPromise !== 'undefined') {
+                await deviceLockSyncPromise;
             }
 
             const existing = document.querySelector('.login-overlay');
@@ -3116,7 +3228,7 @@ let loginPopupShown = false;
             // ============================================================
             const signUpBtn = document.getElementById('emailSignUpBtn');
             if (signUpBtn) {
-                signUpBtn.addEventListener('click', function() {
+                signUpBtn.addEventListener('click', async function() {
                     // ✅ If device is already locked, prevent signup
                     if (isDeviceLocked()) {
                         showCustomPopup('warning', '🔒 Device Locked',
@@ -3124,6 +3236,22 @@ let loginPopupShown = false;
                             getRegisteredEmail() +
                             '\n\nOnly one account per device is allowed.',
                             'OK');
+                        return;
+                    }
+
+                    // ✅ Final safety net: live Firestore fingerprint check (agar localStorage
+                    // abhi clear hui ho aur sync miss ho gaya ho to bhi yahan catch ho jayega)
+                    const liveFingerprintEmail = await checkFingerprintLock();
+                    if (liveFingerprintEmail) {
+                        lockDeviceToEmail(liveFingerprintEmail);
+                        showCustomPopup('warning', '🔒 Device Locked',
+                            'This device already has a registered account.\n\n📧 Registered email: ' +
+                            liveFingerprintEmail +
+                            '\n\nOnly one account per device is allowed.',
+                            'OK', function() {
+                                closeLoginPopup();
+                                setTimeout(showLoginPopup, 300);
+                            });
                         return;
                     }
 
@@ -3179,11 +3307,18 @@ let loginPopupShown = false;
             // ============================================================
             // GOOGLE SIGN IN / SIGN UP - With Device Lock
             // ============================================================
-            function handleGoogleSignIn() {
+            async function handleGoogleSignIn() {
                 // ✅ Check device lock before Google sign in
                 if (isDeviceLocked()) {
                     const registered = getRegisteredEmail();
                     // We'll check after login if email matches
+                } else {
+                    // ✅ localStorage empty ho sakta hai lekin fingerprint locked ho -
+                    // live check karke restore kar lo Google popup khulnay se pehle
+                    const liveFingerprintEmail = await checkFingerprintLock();
+                    if (liveFingerprintEmail) {
+                        lockDeviceToEmail(liveFingerprintEmail);
+                    }
                 }
 
                 const provider = new firebase.auth.GoogleAuthProvider();
@@ -3272,6 +3407,11 @@ let loginPopupShown = false;
             // ✅ Auth state process hone se pehle referral check complete hona chahiye
             // (taake login popup mein referrer code time pe show ho)
             await referralCheckPromise;
+
+            // ✅ Fingerprint sync bhi complete hona chahiye (localStorage clear detect karne ke liye)
+            if (typeof deviceLockSyncPromise !== 'undefined') {
+                await deviceLockSyncPromise;
+            }
 
             if (user) {
                 const email = user.email || '';
